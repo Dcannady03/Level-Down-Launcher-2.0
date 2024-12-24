@@ -24,48 +24,29 @@ def load_dark_theme(app):
         print(f"Dark theme not found at {theme_path}. Using default styles.")  # Debug message
 
 
-def check_and_apply_updates():
-    """Check for updates and apply them if necessary."""
-    print("Checking for updates...")  # Debug message
-    updater = Updater(enable_updates=True)  # Enable updates
-
-    # Run the update process
-    updater.run()
-
-    # If the main executable was updated, restart the application
-    if any(file["name"] == "main.exe" for file in updater.manifest.get("files", [])):
-        print("main.exe updated. Restarting application...")
-        python_executable = sys.executable
-        script_path = sys.argv[0]
-        os.execv(python_executable, [python_executable, script_path])
-
-
 def main():
     global splash, launcher  # Declare globals
 
-    # Step 1: Check and apply updates before launching the app
-    check_and_apply_updates()
+    print("Starting the application...")  # Debug message
 
-    # Step 2: Initialize the application
+    # Step 1: Initialize the application
     app = QApplication(sys.argv)
 
-    # Load dark theme
+    # Step 2: Load dark theme
     load_dark_theme(app)
 
-    # Initialize updater and splash screen
-    enable_updates = True  # Set to True to enable updates
+    # Step 3: Initialize updater and splash screen
+    enable_updates = True  # Enable updates
     updater = Updater(enable_updates=enable_updates)
     splash = SplashScreen(updater)
     splash.show()
 
-    # Function to load the main launcher
+    # Function to load the main launcher after updates
     def load_main_window():
         global launcher  # Retain reference to launcher
         try:
             print("Loading main launcher...")  # Debug message
-            splash.hide()  # Hide splash screen (retain its reference)
-            print("Splash screen hidden.")  # Debug message
-
+            splash.hide()  # Hide splash screen
             launcher = Launcher()  # Initialize the launcher
             launcher.show()  # Show the launcher window
             print("Launcher is now visible.")  # Debug message
@@ -75,11 +56,9 @@ def main():
     # Connect splash worker's signal to load the main window
     splash.worker.finished.connect(load_main_window)
 
-    # Start the event loop
+    # Step 4: Start the application event loop
     sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
-    print("Starting the application...")  # Debug message
     main()
-
