@@ -8,7 +8,7 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "d0138f2a16b4f39727e42232de8f5872"
+            "checksum": "06f7c024bb84925c3101ffe07c765173"
         },
         {
             "name": "assets/images/ashita.png",
@@ -88,7 +88,7 @@
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "1dcad57a03729551004a04e2be3c31ae"
+            "checksum": "4fdb271f47a62539fefb9a0698f5bc3a"
         },
         {
             "name": "modules/__init__.py",

@@ -1,27 +1,27 @@
 from PyQt5.QtWidgets import QApplication
 from modules.splash_screen import SplashScreen
 from modules.updater import Updater
-from modules.launcher import Launcher  # Import the Launcher
+from modules.launcher import Launcher
 import sys
 
 
 def main():
+    app = QApplication(sys.argv)
+
+    # Initialize Updater
     updater = Updater()
 
-    # Check for updates
-    files_to_update = updater.check_for_updates()
+    # Show Splash Screen
+    splash = SplashScreen(updater)  # Define splash screen
+    splash.show()
 
-    if files_to_update:
-        print(f"{len(files_to_update)} file(s) need to be updated.")
-        updater.apply_updates(files_to_update)
-    else:
-        print("All files are up to date.")
-
-
-    # On update completion, load the main launcher
+    # Check for updates during the splash screen
     def load_main_window():
-        splash.close()  # Close the splash screen
-        launcher = Launcher()  # Load main launcher
+        # Close the splash screen after updates are applied
+        splash.close()
+
+        # Launch the main application
+        launcher = Launcher()
         launcher.show()
 
     splash.worker.finished.connect(load_main_window)
