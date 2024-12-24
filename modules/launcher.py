@@ -8,6 +8,7 @@ from modules.server_tabs.level_down_75_era import LevelDown75ERATab
 from modules.settings import Settings
 from modules.xi_updater import XIUpdaterTab  # Assuming XI Updater tab exists
 import os
+from PyQt5.QtCore import Qt
 
 
 class Launcher(QMainWindow):

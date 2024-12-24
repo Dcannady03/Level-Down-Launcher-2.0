@@ -1,5 +1,5 @@
 {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "files": [
         {
             "name": "launcher.py",
@@ -79,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "24e3edd532f44c200a52e28d44def078"
+            "checksum": "9b1cf2715cf35e52edbc7ce885d5c646"
         },
         {
             "name": "modules/server_tabs.py",
