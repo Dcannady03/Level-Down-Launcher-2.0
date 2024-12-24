@@ -5,6 +5,18 @@ import os
 import sys
 import requests
 import hashlib
+import subprocess
+
+def install_dependencies():
+    """Ensure required dependencies are installed."""
+    required_packages = ["PyQt5", "requests"]
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+install_dependencies()
 
 def apply_dark_theme(app):
     """Load and apply the dark theme stylesheet."""

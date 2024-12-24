@@ -14,7 +14,12 @@
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "bf8cca374903113307df7ff7477d0ee0"
+            "checksum": "0f1b22423db24df143e118fbb337045c"
+        },
+        {
+            "name": "splash_screen.spec",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.spec",
+            "checksum": "697df41c60cca579dbb4bee5492c267c"
         },
         {
             "name": "assets/images/ashita.png",
@@ -30,6 +35,11 @@
             "name": "assets/images/sidebarbackground.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/sidebarbackground.png",
             "checksum": "f2eaab251356e27ee979954824599099"
+        },
+        {
+            "name": "assets/images/test6.ico",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/test6.ico",
+            "checksum": "285561dc44cbf216815cd699c8db5784"
         },
         {
             "name": "assets/images/test6.png",
