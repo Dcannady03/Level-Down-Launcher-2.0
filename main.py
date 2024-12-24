@@ -20,19 +20,18 @@ def main():
 
     # Function to load the main launcher after updates
     def load_main_window():
-        print("Loading main launcher...")  # Debug message
-        splash.close()  # Close the splash screen
+        print("Loading main launcher...")
+        splash.close()
 
-        # Create and show the Launcher window
-        launcher = Launcher()  # Keep a global reference
+        # Create and show Launcher
+        global launcher
+        launcher = Launcher()
         launcher.show()
-        print("Launcher is now visible.")  # Debug message
 
-    # Connect the worker's finished signal to load the main window
-    splash.worker.finished.connect(load_main_window)
+        # Test if the application is still running
+        print("Launcher should now be visible.")
+        print(f"Launcher is visible: {launcher.isVisible()}")  # Check if Launcher is actually visible
 
-    # Start the application event loop
-    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

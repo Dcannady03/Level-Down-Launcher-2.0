@@ -10,6 +10,7 @@ from modules.settings import Settings
 class Launcher(QMainWindow):
     def __init__(self):
         super().__init__()
+        print("Initializing Launcher...")  # Debug message
         self.setWindowTitle("Level Down Launcher 2.0")
         self.setGeometry(100, 100, 800, 600)
 
@@ -28,17 +29,22 @@ class Launcher(QMainWindow):
         self.setCentralWidget(container)
 
     def create_tabs(self):
+        print("Creating tabs...")  # Debug message
         tabs = QTabWidget()
 
         # Add Dashboard Tab
         tabs.addTab(Dashboard(), "Dashboard")
+        print("Dashboard tab added.")  # Debug message
 
         # Add Server Tabs
         tabs.addTab(LevelDown99Tab(), "Level Down 99")
         tabs.addTab(LevelDown75Tab(), "Level Down 75")
         tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
+        print("Server tabs added.")  # Debug message
 
         # Add Settings Tab
         tabs.addTab(Settings(), "Settings")
+        print("Settings tab added.")  # Debug message
 
         return tabs
+
