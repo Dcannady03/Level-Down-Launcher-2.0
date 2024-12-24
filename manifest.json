@@ -1,19 +1,10 @@
 {
     "files": [
-        {
-            "name": ".gitattributes",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/.gitattributes",
-            "checksum": "dcb240655dcbf79b8706d11c8c2a169c"
-        },
-        {
-            "name": "dark_theme.qss",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/dark_theme.qss",
-            "checksum": "02d8bfd521741d2ece436cd238324308"
-        },
+        
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "ac85c736d5555d8d561d7f93db757903"
+            "checksum": "d358f02e387b8b50179847949de9191f"
         },
         {
             "name": "assets/images/ashita.png",
@@ -61,6 +52,11 @@
             "checksum": "881ae345cb2aee662c59c99a4344f2a1"
         },
         {
+            "name": "assets/styles/dark_theme.qss",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/styles/dark_theme.qss",
+            "checksum": "02d8bfd521741d2ece436cd238324308"
+        },
+        {
             "name": "modules/dashboard.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/dashboard.py",
             "checksum": "89ae1a19d052df25c2af9266c69673fa"
@@ -93,7 +89,7 @@
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "b0ef69d82bbca0510e4e0a18a0dd129a"
+            "checksum": "55f5e95817b520bb5a7bd53e3227c744"
         },
         {
             "name": "modules/xi_updater.py",
@@ -178,7 +174,7 @@
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/updater.cpython-311.pyc",
-            "checksum": "e22e8a04ea416a709af5db7063378b15"
+            "checksum": "97f0989160f9057f1d945d1bda68f705"
         },
         {
             "name": "modules/__pycache__/xi_updater.cpython-311.pyc",

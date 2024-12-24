@@ -1,62 +1,84 @@
 import os
 import requests
 import hashlib
-import json
-from time import sleep
 
 class Updater:
+    # Updated manifest URL
+    MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
+
     def __init__(self, enable_updates=True):
-        self.enable_updates = enable_updates  # Control updates with this flag
+        self.enable_updates = enable_updates
+        self.manifest = None
 
-    def check_for_updates(self):
-        """Check for missing or outdated files."""
-        if not self.enable_updates:
-            print("Update check skipped.")  # Debug message
-            return []
-
-        # Normal update logic
+    def fetch_manifest(self):
+        """Fetch the remote manifest."""
         try:
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
-
-            manifest = response.json()
-            files_to_update = []
-
-            for file in manifest.get("files", []):
-                file_path = os.path.join(self.LOCAL_DIR, file["name"])
-                if not os.path.exists(file_path) or self.calculate_checksum(file_path) != file["checksum"]:
-                    files_to_update.append(file)
-
-            return files_to_update
+            self.manifest = response.json()
+            print("Manifest fetched successfully.")  # Debug message
         except Exception as e:
-            print(f"Error during update check: {e}")
+            print(f"Error fetching manifest: {e}")
+            self.manifest = None
+
+    def calculate_checksum(self, file_path):
+        """Calculate the checksum of a local file."""
+        sha256 = hashlib.sha256()
+        with open(file_path, "rb") as f:
+            while chunk := f.read(8192):
+                sha256.update(chunk)
+        return sha256.hexdigest()
+
+    def check_for_updates(self):
+        """Check for files that need updates."""
+        if not self.enable_updates:
+            print("Updates are disabled.")  # Debug message
             return []
 
+        if not self.manifest:
+            print("No manifest available. Skipping update check.")  # Debug message
+            return []
 
-    def apply_updates(self, files_to_update):
-        """Download and update the required files with retries."""
-        total_files = len(files_to_update)
-        for i, file in enumerate(files_to_update, start=1):
-            file_path = os.path.join(self.LOCAL_DIR, file["name"])
+        updates = []
+        for file in self.manifest.get("files", []):
+            local_path = os.path.join(os.getcwd(), file["name"])
+            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+                updates.append(file)
+
+        return updates
+
+    def apply_updates(self, updates):
+        """Download and replace outdated files."""
+        for file in updates:
+            file_path = os.path.join(os.getcwd(), file["name"])
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-            success = False
-            for attempt in range(3):
-                try:
-                    print(f"Downloading {file['name']}... (Attempt {attempt + 1}/3)")
-                    response = requests.get(file["url"], stream=True)
-                    response.raise_for_status()
+            try:
+                print(f"Downloading {file['name']}...")
+                response = requests.get(file["url"], stream=True)
+                response.raise_for_status()
+                with open(file_path, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                print(f"Updated: {file['name']}")
+            except Exception as e:
+                print(f"Error downloading {file['name']}: {e}")
 
-                    with open(file_path, "wb") as f:
-                        for chunk in response.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
+    def run(self):
+        """Perform the update check and apply updates if necessary."""
+        if not self.enable_updates:
+            print("Updates are disabled.")  # Debug message
+            return
 
-                    print(f"Updated: {file['name']}")
-                    success = True
-                    break
-                except requests.RequestException as e:
-                    print(f"Error downloading {file['name']} (Attempt {attempt + 1}): {e}")
+        self.fetch_manifest()
 
-            if not success:
-                print(f"Failed to download {file['name']} after 3 attempts.")
+        if not self.manifest:
+            print("Manifest fetch failed. Aborting updates.")
+            return
+
+        updates = self.check_for_updates()
+        if updates:
+            print(f"Found {len(updates)} file(s) to update.")
+            self.apply_updates(updates)
+        else:
+            print("All files are up to date.")
