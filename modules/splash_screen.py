@@ -68,16 +68,17 @@ class UpdateWorker(QThread):
         self.updater = updater
 
     def run(self):
-        # Step 1: Check for updates
-        self.update_progress.emit(10, "Checking for updates...")
+        print("Worker started...")  # Debug message
+
+        # Perform update steps
         files_to_update = self.updater.check_for_updates()
 
         if files_to_update:
             total_files = len(files_to_update)
-            # Step 2: Apply updates if needed
             for i, file in enumerate(files_to_update, start=1):
                 self.update_progress.emit(10 + int((i / total_files) * 80), f"Updating {file['name']}...")
                 self.updater.apply_updates([file])
 
-        # Step 3: Finalize
         self.update_progress.emit(100, "Updates complete!")
+        print("Worker finished.")  # Debug message
+
