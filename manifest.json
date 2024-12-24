@@ -8,7 +8,7 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "e92a14481de828de71f08705298a3a1e"
+            "checksum": "33359e8055ecd5ddb2b2874aeab740b8"
         },
         {
             "name": "assets/images/ashita.png",
@@ -83,7 +83,7 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "d0bb6c2230b1fe3da72ed598625833c1"
+            "checksum": "370397524cc91883fd275491c149feac"
         },
         {
             "name": "modules/updater.py",
@@ -143,7 +143,7 @@
         {
             "name": "modules/__pycache__/launcher.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/launcher.cpython-311.pyc",
-            "checksum": "56090d6d6e989249b1ca02df2ca8bd70"
+            "checksum": "cf331c47b4f43594343c90d7cf8e0669"
         },
         {
             "name": "modules/__pycache__/server_tabs.cpython-311.pyc",
@@ -163,7 +163,7 @@
         {
             "name": "modules/__pycache__/splash_screen.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/splash_screen.cpython-311.pyc",
-            "checksum": "02e0cb9bf5f5f64ca88e4bc60e6c6890"
+            "checksum": "5f0da2884b14587b112d85d43a196c27"
         },
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
