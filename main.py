@@ -1,28 +1,19 @@
-from splash_screen import SplashScreen
-from launcher import Launcher
 from PyQt5.QtWidgets import QApplication
+from launcher import Launcher
 import sys
 
-
 def main():
+    """Main function to start the launcher."""
     app = QApplication(sys.argv)
 
-    # Show splash/updater
-    splash = SplashScreen()
-    splash.show()
-
-    # Launch main application once the updater is complete
-    def launch_app():
-        launcher = Launcher()
-        launcher.show()
-        splash.close()
-
-    splash.worker.finished.connect(launch_app)
+    # Initialize the main launcher window
+    launcher = Launcher()
+    launcher.show()
 
     # Start the event loop
     sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
+    print("Starting the application...")
     main()
-
