@@ -58,6 +58,8 @@ class SplashScreen(QMainWindow):
     def update_progress(self, progress, message):
         self.status_label.setText(message)
         self.progress_bar.setValue(progress)
+
+
 class UpdateWorker(QThread):
     update_progress = pyqtSignal(int, str)
 
@@ -66,10 +68,16 @@ class UpdateWorker(QThread):
         self.updater = updater
 
     def run(self):
-        # Use the updater to check and apply updates
-        steps = self.updater.get_update_steps()
-        total_steps = len(steps)
+        # Step 1: Check for updates
+        self.update_progress.emit(10, "Checking for updates...")
+        files_to_update = self.updater.check_for_updates()
 
-        for index, (message, progress_func) in enumerate(steps, start=1):
-            self.update_progress.emit(int((index / total_steps) * 100), message)
-            progress_func()  # Perform the update step
+        if files_to_update:
+            total_files = len(files_to_update)
+            # Step 2: Apply updates if needed
+            for i, file in enumerate(files_to_update, start=1):
+                self.update_progress.emit(10 + int((i / total_files) * 80), f"Updating {file['name']}...")
+                self.updater.apply_updates([file])
+
+        # Step 3: Finalize
+        self.update_progress.emit(100, "Updates complete!")

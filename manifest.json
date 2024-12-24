@@ -83,7 +83,7 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "8a7957eb8dfd33d11622fc4040cce451"
+            "checksum": "b55dc6b4c99ac2ade46491a9dcc1db70"
         },
         {
             "name": "modules/updater.py",
@@ -118,32 +118,32 @@
         {
             "name": "modules/server_tabs/__pycache__/level_down_75.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__pycache__/level_down_75.cpython-311.pyc",
-            "checksum": "15e7b1e935d70094f8edaa650e6e09f5"
+            "checksum": "c7484a2cb265c8e63ba42c33a40964e2"
         },
         {
             "name": "modules/server_tabs/__pycache__/level_down_75_era.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__pycache__/level_down_75_era.cpython-311.pyc",
-            "checksum": "c52ac5eb6d30ba2fed174d0c73e87cc0"
+            "checksum": "01e24a43310c5e60286fba7a5f3239c2"
         },
         {
             "name": "modules/server_tabs/__pycache__/level_down_99.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__pycache__/level_down_99.cpython-311.pyc",
-            "checksum": "8006231f8587cd934c62389cbf0b85f8"
+            "checksum": "c7f460817bf054b86728dbf23f13b42d"
         },
         {
             "name": "modules/server_tabs/__pycache__/__init__.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__pycache__/__init__.cpython-311.pyc",
-            "checksum": "6414924ad0991d802b1f1981992dca59"
+            "checksum": "db4c66f3bdd4e5415fec82d56a51e9cd"
         },
         {
             "name": "modules/__pycache__/dashboard.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/dashboard.cpython-311.pyc",
-            "checksum": "c53fc0dbe5d254f2276d797915ba071e"
+            "checksum": "5e9db45020deb9c5d95ceae69b88c322"
         },
         {
             "name": "modules/__pycache__/launcher.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/launcher.cpython-311.pyc",
-            "checksum": "c5e56c96087187cfaa2d8d29e15ea6d2"
+            "checksum": "56090d6d6e989249b1ca02df2ca8bd70"
         },
         {
             "name": "modules/__pycache__/server_tabs.cpython-311.pyc",
@@ -153,27 +153,27 @@
         {
             "name": "modules/__pycache__/settings.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/settings.cpython-311.pyc",
-            "checksum": "998db11ed83e52ee3c546bd17ca977f2"
+            "checksum": "f96a113e573f3bb61bcf29f814053217"
         },
         {
             "name": "modules/__pycache__/sidebar.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/sidebar.cpython-311.pyc",
-            "checksum": "52703555a6d20841bfe18d33b60f76e2"
+            "checksum": "2c840f740addfffe509050ac2f3752fb"
         },
         {
             "name": "modules/__pycache__/splash_screen.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/splash_screen.cpython-311.pyc",
-            "checksum": "83c6bf6e2279fd529bb3747a13f0b7d9"
+            "checksum": "02e0cb9bf5f5f64ca88e4bc60e6c6890"
         },
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/updater.cpython-311.pyc",
-            "checksum": "27c5fe69814cd8802518d6e6fb99dd81"
+            "checksum": "7ad981a94ac2dbe5632d35d1691ddbb5"
         },
         {
             "name": "modules/__pycache__/__init__.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/__init__.cpython-311.pyc",
-            "checksum": "e3e5e849d314464fe90bf26e3bbbe204"
+            "checksum": "1d85090dd02acd3ac15a16731f1b5334"
         }
     ]
 }
