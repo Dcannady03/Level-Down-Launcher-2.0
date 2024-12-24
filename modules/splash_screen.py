@@ -1,7 +1,8 @@
-import os
 from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
+import sys
+import os
 
 
 class SplashScreen(QMainWindow):
@@ -23,7 +24,7 @@ class SplashScreen(QMainWindow):
         self.overlay = QVBoxLayout()
 
         # Status Label
-        self.status_label = QLabel("Initializing...")
+        self.status_label = QLabel("Initializing updates...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
         self.status_label.setAlignment(Qt.AlignCenter)
@@ -56,40 +57,66 @@ class SplashScreen(QMainWindow):
         # Start the update process
         self.worker = UpdateWorker(updater)
         self.worker.update_progress.connect(self.update_progress)
-        self.worker.finished.connect(self.on_update_complete)  # Handle worker completion
+        self.worker.finished.connect(self.on_update_complete)
         self.worker.start()
 
     def update_progress(self, progress, message):
+        """Update progress bar and status label."""
         self.status_label.setText(message)
         self.progress_bar.setValue(progress)
 
-    def on_update_complete(self):
-        print("Updates complete. Proceeding to the main application.")
-        # Add logic to transition to the main application (e.g., hide splash screen).
+    def on_update_complete(self, restart_required):
+        """Handle completion of updates."""
+        if restart_required:
+            print("main.exe updated. Restarting application...")
+            python_executable = sys.executable
+            script_path = sys.argv[0]
+            os.execv(python_executable, [python_executable, script_path])
+        else:
+            self.hide()
+            self.load_main_window()
 
+    def load_main_window(self):
+        """Transition to the main launcher."""
+        from modules.launcher import Launcher  # Import here to avoid circular imports
+        self.main_window = Launcher()
+        self.main_window.show()
+from PyQt5.QtCore import QThread, pyqtSignal
 
 class UpdateWorker(QThread):
     update_progress = pyqtSignal(int, str)
+    finished = pyqtSignal(bool)  # Signal whether a restart is required
 
     def __init__(self, updater):
         super().__init__()
         self.updater = updater
 
     def run(self):
-        try:
-            print("UpdateWorker started...")  # Debug message
+        print("UpdateWorker started...")  # Debug message
 
+        try:
+            # Check for updates
             files_to_update = self.updater.check_for_updates()
-            if files_to_update:
-                print(f"Files to update: {len(files_to_update)}")  # Debug message
+            total_files = len(files_to_update)
+
+            restart_required = any(file["name"] == "main.exe" for file in files_to_update)
+
+            if total_files > 0:
+                print(f"Files to update: {total_files}")  # Debug message
+
+                # Apply updates with progress tracking
                 for i, file in enumerate(files_to_update, start=1):
                     self.update_progress.emit(
-                        10 + int((i / len(files_to_update)) * 80), f"Updating {file['name']}..."
+                        int((i / total_files) * 100), f"Updating {file['name']}..."
                     )
-                    self.updater.apply_updates([file])
+                    self.updater.download_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
             print("UpdateWorker finished.")  # Debug message
+
+            # Emit finished signal
+            self.finished.emit(restart_required)
         except Exception as e:
-            self.update_progress.emit(0, f"Error during updates: {e}")
             print(f"Error in UpdateWorker: {e}")
+            self.update_progress.emit(0, f"Error: {e}")
+            self.finished.emit(False)

@@ -3,7 +3,7 @@
         {
             "name": ".gitattributes",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/.gitattributes",
-            "checksum": "dcb240655dcbf79b8706d11c8c2a169c"
+            "checksum": "05bdb783ee6514c8c072e47680af8ff7"
         },
         {
             "name": "main.py",
@@ -58,37 +58,37 @@
         {
             "name": "assets/styles/dark_theme.qss",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/styles/dark_theme.qss",
-            "checksum": "02d8bfd521741d2ece436cd238324308"
+            "checksum": "8342c961739b724fe672887eabecaa62"
         },
         {
             "name": "modules/dashboard.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/dashboard.py",
-            "checksum": "89ae1a19d052df25c2af9266c69673fa"
+            "checksum": "8218d3f0a1110e52cc89aa511751b603"
         },
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "48edc6f62b92accc9e067e941cd8bf13"
+            "checksum": "19d2bedfb13618c43502a9ec26cd9489"
         },
         {
             "name": "modules/server_tabs.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs.py",
-            "checksum": "09bc2faad1e986f8d2b9ae9abb5c33ef"
+            "checksum": "e823a08424274528f60d6daea807544f"
         },
         {
             "name": "modules/settings.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/settings.py",
-            "checksum": "8864f973b83343be7904c6a876b29cfb"
+            "checksum": "5f7dcb75c444fe83d24e28e28e3d8989"
         },
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "ac56ed258ae67134eccae56da7411d04"
+            "checksum": "6216123be8d22f3e511f4bacd7593dba"
         },
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "c964be58d85b78476dd2f6998776e751"
+            "checksum": "73baa2413245fbb75aa754baa9930e53"
         },
         {
             "name": "modules/updater.py",
@@ -113,7 +113,7 @@
         {
             "name": "modules/server_tabs/level_down_75_era.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/level_down_75_era.py",
-            "checksum": "edba547a8ab1cc9ecc9c06346d5aae57"
+            "checksum": "1f5ffdff80e91206abd718f58bad88d5"
         },
         {
             "name": "modules/server_tabs/level_down_99.py",
