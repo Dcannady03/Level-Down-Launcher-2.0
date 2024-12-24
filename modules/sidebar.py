@@ -1,8 +1,10 @@
-
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QDesktopServices
+from PyQt5.QtCore import Qt, QUrl
 import os
+import json
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
+import subprocess  # For launching executables
+import sys
 
 
 class Sidebar(QWidget):
@@ -44,7 +46,7 @@ class Sidebar(QWidget):
         image_label = QLabel()
         pixmap = QPixmap(image_path)
         if not pixmap.isNull():
-            scaled_pixmap = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled_pixmap = pixmap.scaled(80, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             image_label.setPixmap(scaled_pixmap)
         else:
             image_label.setText("Image Missing")
@@ -78,6 +80,7 @@ class Sidebar(QWidget):
         btn.setLayout(container_layout)
 
         layout.addWidget(btn)
+
     def show_popup(self, message):
         """Show a popup message."""
         msg_box = QMessageBox()
@@ -86,22 +89,22 @@ class Sidebar(QWidget):
         msg_box.setText(message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
-        
+
     def load_settings(self):
         """Load settings from settings.json file."""
         if os.path.exists("settings.json"):
             with open("settings.json", "r") as f:
                 return json.load(f)
-        return {}    
-    
+        return {}
+
     def launch_executable(self, directory, executable_name):
         """Launch the executable if the directory is valid."""
         executable_path = os.path.join(directory, executable_name)
         if os.path.exists(executable_path):
-            subprocess.Popen([executable_path], shell=True)
+            subprocess.Popen([executable_path])
         else:
             self.show_popup(f"The executable '{executable_name}' was not found in the directory:\n{directory}")
-            
+
     def launch_ashita(self):
         settings = self.load_settings()
         ashita_dir = settings.get("ashita_dir")
@@ -119,5 +122,6 @@ class Sidebar(QWidget):
             self.launch_executable(windower_dir, "Windower.exe")
 
     def open_wiki(self):
-        # Open the Wiki URL
-        QDesktopServices.openUrl(QUrl("https://ffxileveldown.fandom.com/wiki/FFXILevelDown_Wiki"))
+        """Open the Wiki URL."""
+        wiki_url = "https://ffxileveldown.fandom.com/wiki/FFXILevelDown_Wiki"
+        QDesktopServices.openUrl(QUrl(wiki_url))
