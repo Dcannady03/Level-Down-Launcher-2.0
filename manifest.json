@@ -94,7 +94,7 @@
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "c87d9570037a6d647f2931ea0c1ffc45"
+            "checksum": "a2afca2346343941b56bd59f23b6511b"
         },
         {
             "name": "modules/xi_updater.py",
@@ -179,7 +179,7 @@
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/updater.cpython-311.pyc",
-            "checksum": "2bca956dbcc002a409eba89e844edf7d"
+            "checksum": "bfb86ac9901b25afe0939e3af59a2bd2"
         },
         {
             "name": "modules/__pycache__/xi_updater.cpython-311.pyc",

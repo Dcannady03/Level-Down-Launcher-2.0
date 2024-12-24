@@ -93,6 +93,10 @@ class Updater:
             print("Manifest fetch failed. Aborting updates.")
             return
 
+        if not self.manifest.get("files"):
+            print("Manifest is valid but contains no files. Skipping updates.")
+            return
+
         if self.is_new_version():
             print(f"New version available: {self.manifest['version']}")
 
