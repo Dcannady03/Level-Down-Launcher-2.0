@@ -6,14 +6,17 @@ import sys
 
 
 def main():
-    app = QApplication(sys.argv)
-
-    # Initialize Updater
     updater = Updater()
 
-    # Show Splash Screen
-    splash = SplashScreen(updater)
-    splash.show()
+    # Check for updates
+    files_to_update = updater.check_for_updates()
+
+    if files_to_update:
+        print(f"{len(files_to_update)} file(s) need to be updated.")
+        updater.apply_updates(files_to_update)
+    else:
+        print("All files are up to date.")
+
 
     # On update completion, load the main launcher
     def load_main_window():
