@@ -5,7 +5,19 @@ import os
 import sys
 import requests
 import hashlib
-import subprocess
+import shutil
+import atexit  # Import atexit for cleanup
+
+# Register a cleanup function to avoid errors
+def cleanup_temp():
+    temp_dir = getattr(sys, '_MEIPASS', None)
+    if temp_dir and os.path.isdir(temp_dir):
+        try:
+            shutil.rmtree(temp_dir)
+        except Exception as e:
+            print(f"Failed to cleanup temp dir {temp_dir}: {e}")
+
+atexit.register(cleanup_temp)  # Register the cleanup function
 
 def install_dependencies():
     """Ensure required dependencies are installed."""
