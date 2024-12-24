@@ -24,19 +24,36 @@ def load_dark_theme(app):
         print(f"Dark theme not found at {theme_path}. Using default styles.")  # Debug message
 
 
+def check_and_apply_updates():
+    """Check for updates and apply them if necessary."""
+    print("Checking for updates...")  # Debug message
+    updater = Updater(enable_updates=True)  # Enable updates
+
+    # Run the update process
+    updater.run()
+
+    # If the main executable was updated, restart the application
+    if any(file["name"] == "main.exe" for file in updater.manifest.get("files", [])):
+        print("main.exe updated. Restarting application...")
+        python_executable = sys.executable
+        script_path = sys.argv[0]
+        os.execv(python_executable, [python_executable, script_path])
+
+
 def main():
     global splash, launcher  # Declare globals
 
+    # Step 1: Check and apply updates before launching the app
+    check_and_apply_updates()
+
+    # Step 2: Initialize the application
     app = QApplication(sys.argv)
 
     # Load dark theme
     load_dark_theme(app)
 
-    # Enable or disable updates
-    enable_updates = True  # Set to True to enable updates
-    print(f"Updates enabled: {enable_updates}")  # Debug message
-
     # Initialize updater and splash screen
+    enable_updates = True  # Set to True to enable updates
     updater = Updater(enable_updates=enable_updates)
     splash = SplashScreen(updater)
     splash.show()
