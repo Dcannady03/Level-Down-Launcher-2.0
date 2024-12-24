@@ -110,7 +110,9 @@ class Sidebar(QWidget):
         ashita_dir = settings.get("ashita_dir")
         if not ashita_dir:
             self.show_popup("Please set the directory for Ashita in the Settings tab.")
+            print("Ashita directory is not set in settings.json.")
         else:
+            print(f"Launching Ashita from directory: {ashita_dir}")
             self.launch_executable(ashita_dir, "Ashita.exe")
 
     def launch_windower(self):
