@@ -15,13 +15,16 @@ def main():
     splash = SplashScreen(updater)
     splash.show()
 
+    # Define the launcher as a global variable to prevent garbage collection
+    global launcher
+
     # Function to load the main launcher after updates
     def load_main_window():
         print("Loading main launcher...")  # Debug message
         splash.close()  # Close the splash screen
 
         # Create and show the Launcher window
-        launcher = Launcher()
+        launcher = Launcher()  # Keep a global reference
         launcher.show()
         print("Launcher is now visible.")  # Debug message
 
