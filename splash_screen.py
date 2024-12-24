@@ -25,7 +25,7 @@ class SplashScreen(QMainWindow):
         self.overlay = QVBoxLayout()
 
         # Status Label
-        self.status_label = QLabel("Initializing...")
+        self.status_label = QLabel("Initializing updates...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
         self.status_label.setAlignment(Qt.AlignCenter)
@@ -75,7 +75,14 @@ class SplashScreen(QMainWindow):
         else:
             self.status_label.setText("Launching application...")
             print("Update completed. Ready to launch.")  # Debug message
-            self.close()  # Close the splash screen
+            self.load_main_window()
+
+    def load_main_window(self):
+        """Transition to the main launcher."""
+        from launcher import Launcher  # Import here to avoid circular imports
+        self.hide()  # Hide the splash screen
+        self.main_window = Launcher()  # Initialize the launcher
+        self.main_window.show()  # Show the launcher window
 
 
 class UpdateWorker(QThread):
@@ -88,12 +95,19 @@ class UpdateWorker(QThread):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Step 1: Check for updates
-            files_to_update = self.updater.check_for_updates()  # No additional arguments
+            # Fetch the manifest
+            manifest = self.fetch_manifest()
+            if not manifest:
+                self.update_progress.emit(0, "Failed to fetch manifest.")
+                self.finished.emit(False)
+                return
+
+            # Check for updates
+            files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
 
             # Determine if a restart is required
-            restart_required = any(file["name"] == "main.exe" for file in files_to_update)
+            restart_required = any(file["name"] == "main.py" for file in files_to_update)
 
             if total_files == 0:
                 print("No updates found. All files are up to date.")  # Debug message
@@ -103,26 +117,20 @@ class UpdateWorker(QThread):
 
             print(f"Files to update: {total_files}")  # Debug message
 
-            # Step 2: Apply updates
+            # Apply updates
             for i, file in enumerate(files_to_update, start=1):
-                try:
-                    self.update_progress.emit(
-                        int((i / total_files) * 100), f"Updating {file['name']}..."
-                    )
-                    self.updater.download_file(file)
-                except Exception as e:
-                    print(f"Error updating {file['name']}: {e}")  # Debug message
-                    self.update_progress.emit(0, f"Error updating {file['name']}.")
+                self.update_progress.emit(
+                    int((i / total_files) * 100), f"Updating {file['name']}..."
+                )
+                self.download_file(file)
 
-            # Step 3: Finalize
             self.update_progress.emit(100, "Updates complete!")
             print("UpdateWorker finished successfully.")  # Debug message
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Critical error in UpdateWorker: {e}")  # Debug message
+            print(f"Critical error in UpdateWorker: {e}")
             self.update_progress.emit(0, f"Critical error: {e}")
             self.finished.emit(False)
-
 
     def fetch_manifest(self):
         try:
@@ -142,30 +150,17 @@ class UpdateWorker(QThread):
                 sha256.update(chunk)
         return sha256.hexdigest()
 
-    def check_for_updates(self):
+    def check_for_updates(self, manifest):
         """Check for files that need updates."""
-        if not self.enable_updates:
-            print("Updates are disabled.")
-            return []
-
-        if not self.manifest:
-            print("No manifest available. Skipping update check.")
-            return []
-
         updates = []
-        for file in self.manifest.get("files", []):
+        for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
             if not os.path.exists(local_path):
-                print(f"File missing: {file['name']}")  # Debug message
                 updates.append(file)
             else:
-                # Compare checksums
                 local_checksum = self.calculate_checksum(local_path)
-                print(f"File: {file['name']} | Local checksum: {local_checksum} | Manifest checksum: {file['checksum']}")  # Debug message
                 if local_checksum != file["checksum"]:
-                    print(f"Checksum mismatch for: {file['name']}")  # Debug message
                     updates.append(file)
-
         return updates
 
     def download_file(self, file):
@@ -185,6 +180,6 @@ class UpdateWorker(QThread):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    splash = SplashScreen()  # Create the splash screen
-    splash.show()  # Show the splash screen
-    sys.exit(app.exec_())  # Run the application event loop
+    splash = SplashScreen()
+    splash.show()
+    sys.exit(app.exec_())
