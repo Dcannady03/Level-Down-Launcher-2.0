@@ -5,19 +5,16 @@ import json
 from time import sleep
 
 class Updater:
-    MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
-    LOCAL_DIR = os.getcwd()
+    def __init__(self, enable_updates=True):
+        self.enable_updates = enable_updates  # Control updates with this flag
 
-    def calculate_checksum(self, file_path):
-        """Calculate the MD5 checksum of a file."""
-        hash_md5 = hashlib.md5()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
-        return hash_md5.hexdigest()
-
-    def check_for_updates(self, dry_run=False):
+    def check_for_updates(self):
         """Check for missing or outdated files."""
+        if not self.enable_updates:
+            print("Update check skipped.")  # Debug message
+            return []
+
+        # Normal update logic
         try:
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
@@ -27,24 +24,14 @@ class Updater:
 
             for file in manifest.get("files", []):
                 file_path = os.path.join(self.LOCAL_DIR, file["name"])
-
-                if not os.path.exists(file_path):
-                    print(f"File missing: {file['name']}")
+                if not os.path.exists(file_path) or self.calculate_checksum(file_path) != file["checksum"]:
                     files_to_update.append(file)
-                else:
-                    local_checksum = self.calculate_checksum(file_path)
-                    if local_checksum != file["checksum"]:
-                        print(f"Checksum mismatch for: {file['name']}")
-                        files_to_update.append(file)
 
-                if dry_run:
-                    print(f"Would update: {file['name']}")
-
-            return files_to_update if not dry_run else []
-
-        except requests.RequestException as e:
-            print(f"Error fetching manifest: {e}")
+            return files_to_update
+        except Exception as e:
+            print(f"Error during update check: {e}")
             return []
+
 
     def apply_updates(self, files_to_update):
         """Download and update the required files with retries."""

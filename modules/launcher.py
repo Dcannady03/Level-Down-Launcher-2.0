@@ -1,10 +1,12 @@
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QWidget
+from PyQt5.QtGui import QPixmap, QPainter
 from modules.sidebar import Sidebar
 from modules.dashboard import Dashboard
 from modules.server_tabs.level_down_99 import LevelDown99Tab
 from modules.server_tabs.level_down_75 import LevelDown75Tab
 from modules.server_tabs.level_down_75_era import LevelDown75ERATab
 from modules.settings import Settings
+from PyQt5.QtCore import Qt
 
 
 class Launcher(QMainWindow):
@@ -12,7 +14,10 @@ class Launcher(QMainWindow):
         super().__init__()
         print("Initializing Launcher...")  # Debug message
         self.setWindowTitle("Level Down Launcher 2.0")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 1100, 750)
+
+        # Store the wallpaper path
+        self.wallpaper_path = "assets/images/wallpaper3.png"
 
         # Main layout
         main_layout = QHBoxLayout()
@@ -27,6 +32,21 @@ class Launcher(QMainWindow):
         container = QWidget()
         container.setLayout(main_layout)
         self.setCentralWidget(container)
+
+    def paintEvent(self, event):
+        """Override paintEvent to draw the wallpaper."""
+        painter = QPainter(self)
+        background = QPixmap(self.wallpaper_path)
+
+        if background.isNull():
+            print(f"Error: Background image '{self.wallpaper_path}' not loaded.")
+        else:
+            # Scale the image to completely fill the window
+            scaled_background = background.scaled(
+                self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation
+            )
+            painter.drawPixmap(0, 0, scaled_background)
+
 
     def create_tabs(self):
         print("Creating tabs...")  # Debug message

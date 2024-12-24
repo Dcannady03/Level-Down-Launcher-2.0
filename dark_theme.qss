@@ -1,0 +1,75 @@
+/* General Application Styles */
+QWidget {
+    background: none; /* Allow QPalette to set the background */
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+}
+
+/* Sidebar Transparency */
+QWidget#Sidebar {
+    background-color: rgba(0, 0, 0, 50%);  /* Semi-transparent black */
+    border-right: 2px solid #444;
+}
+
+/* Image Buttons */
+QPushButton {
+    background-color: transparent;
+    border: none;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 10%);
+}
+
+/* Buttons */
+QPushButton {
+    background-color: #444;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 5px;
+    color: #fff;
+}
+QPushButton:hover {
+    background-color: #555;
+}
+QPushButton:pressed {
+    background-color: #666;
+}
+
+/* Tabs */
+QTabWidget::pane {
+    border: 1px solid #444;
+}
+QTabBar::tab {
+    background: #333;
+    border: 1px solid #444;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+QTabBar::tab:selected {
+    background: #555;
+    color: #fff;
+}
+QTabBar::tab:hover {
+    background: #444;
+}
+
+/* Progress Bar */
+QProgressBar {
+    border: 1px solid #444;
+    text-align: center;
+    color: #ffffff;
+    background: #333;
+}
+QProgressBar::chunk {
+    background-color: #4caf50;
+    width: 10px;
+}
+
+/* Sidebar */
+QWidget#Sidebar {
+    background: none; /* Make the sidebar transparent */
+    border-right: 2px solid #444;
+}
+
