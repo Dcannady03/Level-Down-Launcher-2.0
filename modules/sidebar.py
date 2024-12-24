@@ -5,7 +5,7 @@ import json
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
 import subprocess  # For launching executables
 import sys
-
+import ctypes
 
 class Sidebar(QWidget):
     def __init__(self, parent=None):
@@ -97,13 +97,26 @@ class Sidebar(QWidget):
                 return json.load(f)
         return {}
 
+    import ctypes
+
     def launch_executable(self, directory, executable_name):
-        """Launch the executable if the directory is valid."""
+        """Launch the executable with elevated privileges if required."""
         executable_path = os.path.join(directory, executable_name)
+
         if os.path.exists(executable_path):
-            subprocess.Popen([executable_path])
+            try:
+                # Elevate the process
+                response = ctypes.windll.shell32.ShellExecuteW(None, "runas", executable_path, None, None, 1)
+                if response <= 32:
+                    raise OSError(f"Failed to launch {executable_name} with elevation.")
+                print(f"Successfully launched {executable_name} with elevation.")
+            except Exception as e:
+                self.show_popup(f"Failed to launch {executable_name}: {e}")
+                print(f"Error launching {executable_name}: {e}")
         else:
             self.show_popup(f"The executable '{executable_name}' was not found in the directory:\n{directory}")
+            print(f"Executable not found: {executable_path}")
+
 
     def launch_ashita(self):
         settings = self.load_settings()

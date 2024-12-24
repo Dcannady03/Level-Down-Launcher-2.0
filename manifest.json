@@ -9,7 +9,7 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "ff0993c8152d5667fbfdda85cba9d206"
+            "checksum": "284289c491d0c0bfd9b8490189ca24db"
         },
         {
             "name": "splash_screen.py",
@@ -94,7 +94,7 @@
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "1e84a6385af63337675f509e442fde92"
+            "checksum": "fa9b60fe66b062943de6c0387db7bb5d"
         },
         {
             "name": "modules/splash_screen.py",
