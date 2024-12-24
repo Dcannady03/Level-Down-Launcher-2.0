@@ -11,6 +11,10 @@ BASE_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0
 # Output file for the manifest
 OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 
+# Files and folders to skip
+SKIP_FOLDERS = [".git"]
+SKIP_FILES = ["manifest.py", "manifest.json"]
+
 
 def calculate_checksum(file_path):
     """Calculate the MD5 checksum of a file."""
@@ -25,13 +29,16 @@ def generate_manifest(base_dir, base_url):
     """Generate a manifest of files in the directory."""
     manifest = {"files": []}
 
-    for root, _, files in os.walk(base_dir):
+    for root, dirs, files in os.walk(base_dir):
+        # Skip specified folders
+        dirs[:] = [d for d in dirs if d not in SKIP_FOLDERS]
+
         for file_name in files:
-            file_path = os.path.join(root, file_name)
-            
-            # Skip manifest.json itself
-            if file_name == "manifest.json":
+            # Skip specified files
+            if file_name in SKIP_FILES:
                 continue
+
+            file_path = os.path.join(root, file_name)
 
             # Calculate relative path
             relative_path = os.path.relpath(file_path, base_dir).replace("\\", "/")
@@ -62,3 +69,4 @@ if __name__ == "__main__":
 
     # Save the manifest to the output file
     save_manifest(manifest, OUTPUT_FILE)
+
