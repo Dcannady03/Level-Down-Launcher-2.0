@@ -83,7 +83,7 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "e4ce5b0069f37733e51c75b09d385956"
+            "checksum": "703e89fa8ac6600584e2db1299428241"
         },
         {
             "name": "modules/updater.py",
@@ -163,7 +163,7 @@
         {
             "name": "modules/__pycache__/splash_screen.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/splash_screen.cpython-311.pyc",
-            "checksum": "77d8717b06f13ccc000d8aefb32df24e"
+            "checksum": "1254acfd8ece8284d27090dc779736d3"
         },
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
