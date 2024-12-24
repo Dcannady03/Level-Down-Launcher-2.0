@@ -5,8 +5,11 @@ import os
 class Sidebar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        print("Initializing Sidebar...")  # Debug message
+
         layout = QVBoxLayout()
 
+        # Buttons with callbacks
         buttons = [
             ("Ashita Launcher", self.launch_ashita),
             ("Windower Launcher", self.launch_windower),
@@ -19,9 +22,15 @@ class Sidebar(QWidget):
             btn = QPushButton(name)
             btn.clicked.connect(callback)
             layout.addWidget(btn)
+            print(f"Button added: {name}")  # Debug message
 
+        # Add layout and ensure fixed width
         self.setLayout(layout)
         self.setFixedWidth(200)
+
+        # Add a background color to distinguish the sidebar
+        self.setStyleSheet("background-color: #333; color: white;")
+        print("Sidebar initialized and visible.")  # Debug message
 
     def launch_ashita(self):
         print("Launching Ashita...")  # Replace with actual logic
@@ -36,4 +45,5 @@ class Sidebar(QWidget):
         print("Opening XI Updater...")  # Replace with actual logic
 
     def open_settings(self):
-        print("Opening Settings...")
+        print("Opening Settings...")  # Replace with actual logic
+

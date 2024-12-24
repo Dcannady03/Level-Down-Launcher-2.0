@@ -78,7 +78,7 @@
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "6a328c7ff00b39c03a4f0a473f7c482a"
+            "checksum": "917f655b99ece388d4e63cbbaadd582e"
         },
         {
             "name": "modules/splash_screen.py",
@@ -88,7 +88,7 @@
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "4fdb271f47a62539fefb9a0698f5bc3a"
+            "checksum": "3d511838cbb1b1974887d10737224c49"
         },
         {
             "name": "modules/__init__.py",
