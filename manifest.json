@@ -109,7 +109,7 @@
         {
             "name": "modules/xi_updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/xi_updater.py",
-            "checksum": "4a76bbbdafe1a2c08c4daedb0bb5ff69"
+            "checksum": "5ec260a383eeae4bc11d49bad19feca4"
         },
         {
             "name": "modules/__init__.py",
