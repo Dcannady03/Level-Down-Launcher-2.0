@@ -1,27 +1,15 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget
+from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
 import os
-from PyQt5.QtWidgets import QApplication
 import sys
+import requests
+import hashlib
 
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-
-    from modules.updater import Updater  # Import the updater
-    updater = Updater(enable_updates=True)  # Enable updates
-
-    splash = SplashScreen(updater)  # Create the splash screen
-    splash.show()  # Show the splash screen
-
-    sys.exit(app.exec_())  # Run the application event loop
 
 class SplashScreen(QMainWindow):
-    def __init__(self, updater):
+    def __init__(self):
         super().__init__()
-        self.updater = updater  # Store the updater instance
-
         self.setWindowTitle("Level Down Launcher - Updating")
         self.setGeometry(100, 100, 600, 400)
 
@@ -68,7 +56,7 @@ class SplashScreen(QMainWindow):
         overlay_widget.setGeometry(50, 250, 500, 100)
 
         # Start the update process
-        self.worker = UpdateWorker(updater)
+        self.worker = UpdateWorker()
         self.worker.update_progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_update_complete)
         self.worker.start()
@@ -94,19 +82,24 @@ class UpdateWorker(QThread):
     update_progress = pyqtSignal(int, str)
     finished = pyqtSignal(bool)  # Signal whether a restart is required
 
-    def __init__(self, updater):
-        super().__init__()
-        self.updater = updater
+    MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
 
     def run(self):
         print("UpdateWorker started...")  # Debug message
 
         try:
+            # Fetch the manifest
+            manifest = self.fetch_manifest()
+            if not manifest:
+                print("No manifest available. Skipping update check.")
+                self.finished.emit(False)
+                return
+
             # Check for updates
-            files_to_update = self.updater.check_for_updates()
+            files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
 
-            restart_required = any(file["name"] == "main.exe" for file in files_to_update)
+            restart_required = any(file["name"] == "main.py" for file in files_to_update)
 
             if total_files > 0:
                 print(f"Files to update: {total_files}")  # Debug message
@@ -116,7 +109,7 @@ class UpdateWorker(QThread):
                     self.update_progress.emit(
                         int((i / total_files) * 100), f"Updating {file['name']}..."
                     )
-                    self.updater.download_file(file)
+                    self.download_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
             print("UpdateWorker finished.")  # Debug message
@@ -127,3 +120,51 @@ class UpdateWorker(QThread):
             print(f"Error in UpdateWorker: {e}")
             self.update_progress.emit(0, f"Error: {e}")
             self.finished.emit(False)
+
+    def fetch_manifest(self):
+        try:
+            response = requests.get(self.MANIFEST_URL)
+            response.raise_for_status()
+            print("Manifest fetched successfully.")
+            return response.json()
+        except Exception as e:
+            print(f"Error fetching manifest: {e}")
+            return None
+
+    def calculate_checksum(self, file_path):
+        """Calculate the checksum of a local file."""
+        sha256 = hashlib.sha256()
+        with open(file_path, "rb") as f:
+            while chunk := f.read(8192):
+                sha256.update(chunk)
+        return sha256.hexdigest()
+
+    def check_for_updates(self, manifest):
+        """Check for files that need updates."""
+        updates = []
+        for file in manifest.get("files", []):
+            local_path = os.path.join(os.getcwd(), file["name"])
+            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+                updates.append(file)
+        return updates
+
+    def download_file(self, file):
+        """Download a file from the manifest."""
+        local_path = os.path.join(os.getcwd(), file["name"])
+        os.makedirs(os.path.dirname(local_path), exist_ok=True)
+        try:
+            response = requests.get(file["url"], stream=True)
+            response.raise_for_status()
+            with open(local_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            print(f"Updated: {file['name']}")
+        except Exception as e:
+            print(f"Error downloading {file['name']}: {e}")
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    splash = SplashScreen()  # Create the splash screen
+    splash.show()  # Show the splash screen
+    sys.exit(app.exec_())  # Run the application event loop
