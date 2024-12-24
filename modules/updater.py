@@ -4,7 +4,7 @@ import json
 
 
 class Updater:
-    MANIFEST_URL = "https://yourserver.com/manifest.json"
+    MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
     LOCAL_DIR = os.getcwd()
 
     def check_for_updates(self):
