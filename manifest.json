@@ -2,11 +2,6 @@
     "version": "2.1.0",
     "files": [
         {
-            "name": ".gitattributes",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/.gitattributes",
-            "checksum": "05bdb783ee6514c8c072e47680af8ff7"
-        },
-        {
             "name": "launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
             "checksum": "19d2bedfb13618c43502a9ec26cd9489"
@@ -99,7 +94,7 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "c1e09a5588b388b4c4f838be195db2d8"
+            "checksum": "2e4138015819ea55ae4ae0c115deb56e"
         },
         {
             "name": "modules/updater.py",

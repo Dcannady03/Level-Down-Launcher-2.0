@@ -2,7 +2,20 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWid
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
 import os
+from PyQt5.QtWidgets import QApplication
+import sys
 
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    from modules.updater import Updater  # Import the updater
+    updater = Updater(enable_updates=True)  # Enable updates
+
+    splash = SplashScreen(updater)  # Create the splash screen
+    splash.show()  # Show the splash screen
+
+    sys.exit(app.exec_())  # Run the application event loop
 
 class SplashScreen(QMainWindow):
     def __init__(self, updater):

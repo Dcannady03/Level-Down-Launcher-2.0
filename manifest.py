@@ -13,7 +13,7 @@ OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 
 # Files and folders to skip
 SKIP_FOLDERS = [".git"]
-SKIP_FILES = ["manifest.py", "manifest.json"]
+SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes"]
 
 # Manifest version
 MANIFEST_VERSION = "2.1.0"
