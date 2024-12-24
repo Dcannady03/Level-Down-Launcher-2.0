@@ -17,7 +17,7 @@ def main():
     with open("dark_theme.qss", "r") as file:
         app.setStyleSheet(file.read())
     # Enable or disable updates
-    enable_updates = False  # Set to True to enable updates
+    enable_updates = True  # Set to True to enable updates
     print(f"Updates enabled: {enable_updates}")  # Debug message
 
     # Initialize updater and splash screen

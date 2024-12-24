@@ -7,6 +7,7 @@ from modules.server_tabs.level_down_75 import LevelDown75Tab
 from modules.server_tabs.level_down_75_era import LevelDown75ERATab
 from modules.settings import Settings
 from PyQt5.QtCore import Qt
+from modules.xi_updater import XIUpdaterTab  # Or XIUpdaterWindow if that's the class name
 
 
 class Launcher(QMainWindow):
@@ -49,22 +50,14 @@ class Launcher(QMainWindow):
 
 
     def create_tabs(self):
-        print("Creating tabs...")  # Debug message
         tabs = QTabWidget()
 
-        # Add Dashboard Tab
         tabs.addTab(Dashboard(), "Dashboard")
-        print("Dashboard tab added.")  # Debug message
-
-        # Add Server Tabs
         tabs.addTab(LevelDown99Tab(), "Level Down 99")
         tabs.addTab(LevelDown75Tab(), "Level Down 75")
         tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
-        print("Server tabs added.")  # Debug message
-
-        # Add Settings Tab
+        tabs.addTab(XIUpdaterTab(), "XI Updater")  # Add the updater tab
         tabs.addTab(Settings(), "Settings")
-        print("Settings tab added.")  # Debug message
 
         return tabs
 

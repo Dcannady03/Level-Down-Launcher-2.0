@@ -1,64 +1,123 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton
-from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import Qt, QSize
+
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
+import os
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
 
 
 class Sidebar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setObjectName("Sidebar")  # For QSS styling
+        self.setObjectName("Sidebar")
 
         layout = QVBoxLayout()
 
         # Add buttons with images and labels
-        self.add_button_with_label(
-            layout, "assets/images/ashita.png", "assets/images/ashitatxt.png", self.launch_ashita
+        self.add_image_button_with_label(
+            layout,
+            "assets/images/ashita.png",
+            "assets/images/ashitatxt.png",
+            self.launch_ashita,
         )
-        self.add_button_with_label(
-            layout, "assets/images/wiki.png", "assets/images/wikitxt.png", self.open_wiki
+        self.add_image_button_with_label(
+            layout,
+            "assets/images/windower.png",
+            "assets/images/windowertxt.png",
+            self.launch_windower,
         )
-        self.add_button_with_label(
-            layout, "assets/images/windower.png", "assets/images/windowertxt.png", self.launch_windower
-        )
-
-        # Add XI Updater Button
-        self.add_button_with_label(
-            layout, "assets/images/xiupdater.png", "assets/images/xiupdatetxt.png", self.launch_xi_updater
+        self.add_image_button_with_label(
+            layout,
+            "assets/images/wiki.png",
+            "assets/images/wikitxt.png",
+            self.open_wiki,
         )
 
         self.setLayout(layout)
-        self.setFixedWidth(125)  # Adjust sidebar width if needed
+        self.setFixedWidth(150)
 
-    def add_button_with_label(self, layout, button_img, label_img, callback):
-        """Helper function to add an image button with a label."""
-        # Button with image
+    def add_image_button_with_label(self, layout, image_path, label_image_path, callback):
+        """Create an image button with a label and an additional image label."""
+        container = QWidget()
+        container_layout = QVBoxLayout()
+
+        # Main Button Image
+        image_label = QLabel()
+        pixmap = QPixmap(image_path)
+        if not pixmap.isNull():
+            scaled_pixmap = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            image_label.setPixmap(scaled_pixmap)
+        else:
+            image_label.setText("Image Missing")
+            image_label.setStyleSheet("color: red;")
+        container_layout.addWidget(image_label, alignment=Qt.AlignCenter)
+
+        # Label Image
+        label_image = QLabel()
+        label_pixmap = QPixmap(label_image_path)
+        if not label_pixmap.isNull():
+            scaled_label_pixmap = label_pixmap.scaled(100, 30, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            label_image.setPixmap(scaled_label_pixmap)
+        else:
+            label_image.setText("Label Missing")
+            label_image.setStyleSheet("color: red;")
+        container_layout.addWidget(label_image, alignment=Qt.AlignCenter)
+
+        # Clickable Button
         btn = QPushButton()
-        btn.setCursor(Qt.PointingHandCursor)  # Hand cursor for clickable buttons
-        btn.setFlat(True)  # Remove button borders
-        btn.setIcon(QIcon(button_img))
-        btn.setIconSize(QSize(100, 100))  # Adjust button size
+        btn.setFixedSize(120, 150)  # Adjust button size to fit main image and label
+        btn.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 255, 0, 50%);  /* Light green hover */
+            }
+        """)
         btn.clicked.connect(callback)
+        btn.setLayout(container_layout)
 
-        # Label with image
-        label = QLabel()
-        label.setAlignment(Qt.AlignCenter)
-        label.setFixedSize(120, 40)  # Set the label size (width, height)
-        label_pixmap = QPixmap(label_img).scaled(label.width(), label.height(), Qt.KeepAspectRatio)
-        label.setPixmap(label_pixmap)
-
-        # Add button and label to layout
         layout.addWidget(btn)
-        layout.addWidget(label)
-
+    def show_popup(self, message):
+        """Show a popup message."""
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle("Directory Not Set")
+        msg_box.setText(message)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
+        
+    def load_settings(self):
+        """Load settings from settings.json file."""
+        if os.path.exists("settings.json"):
+            with open("settings.json", "r") as f:
+                return json.load(f)
+        return {}    
+    
+    def launch_executable(self, directory, executable_name):
+        """Launch the executable if the directory is valid."""
+        executable_path = os.path.join(directory, executable_name)
+        if os.path.exists(executable_path):
+            subprocess.Popen([executable_path], shell=True)
+        else:
+            self.show_popup(f"The executable '{executable_name}' was not found in the directory:\n{directory}")
+            
     def launch_ashita(self):
-        print("Launching Ashita...")
-
-    def open_wiki(self):
-        print("Opening Wiki...")
+        settings = self.load_settings()
+        ashita_dir = settings.get("ashita_dir")
+        if not ashita_dir:
+            self.show_popup("Please set the directory for Ashita in the Settings tab.")
+        else:
+            self.launch_executable(ashita_dir, "Ashita.exe")
 
     def launch_windower(self):
-        print("Launching Windower...")
+        settings = self.load_settings()
+        windower_dir = settings.get("windower_dir")
+        if not windower_dir:
+            self.show_popup("Please set the directory for Windower in the Settings tab.")
+        else:
+            self.launch_executable(windower_dir, "Windower.exe")
 
-    def launch_xi_updater(self):
-        print("Launching XI Updater...")
-
+    def open_wiki(self):
+        # Open the Wiki URL
+        QDesktopServices.openUrl(QUrl("https://ffxileveldown.fandom.com/wiki/FFXILevelDown_Wiki"))
