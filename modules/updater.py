@@ -50,7 +50,17 @@ class Updater:
         updates = []
         for file in self.manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+            
+            # Check if the file exists locally
+            if not os.path.exists(local_path):
+                print(f"File missing: {file['name']}")  # Debug message
+                updates.append(file)
+                continue
+
+            # Check if the checksum matches
+            local_checksum = self.calculate_checksum(local_path)
+            if local_checksum != file["checksum"]:
+                print(f"Checksum mismatch for: {file['name']}")  # Debug message
                 updates.append(file)
 
         return updates

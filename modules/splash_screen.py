@@ -1,3 +1,4 @@
+import os
 from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
@@ -12,8 +13,8 @@ class SplashScreen(QMainWindow):
         self.setGeometry(100, 100, 600, 400)
 
         # Background Image
+        pixmap = QPixmap(os.path.join(os.getcwd(), "assets/images/test6.png"))
         self.background = QLabel(self)
-        pixmap = QPixmap(r"I:\git\Level-Down-Launcher-2.0\assets\images\test6.png")
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
         self.background.setGeometry(0, 0, 600, 400)
@@ -55,11 +56,16 @@ class SplashScreen(QMainWindow):
         # Start the update process
         self.worker = UpdateWorker(updater)
         self.worker.update_progress.connect(self.update_progress)
+        self.worker.finished.connect(self.on_update_complete)  # Handle worker completion
         self.worker.start()
 
     def update_progress(self, progress, message):
         self.status_label.setText(message)
         self.progress_bar.setValue(progress)
+
+    def on_update_complete(self):
+        print("Updates complete. Proceeding to the main application.")
+        # Add logic to transition to the main application (e.g., hide splash screen).
 
 
 class UpdateWorker(QThread):
@@ -70,15 +76,20 @@ class UpdateWorker(QThread):
         self.updater = updater
 
     def run(self):
-        print("UpdateWorker started...")  # Debug message
+        try:
+            print("UpdateWorker started...")  # Debug message
 
-        # Perform update steps
-        files_to_update = self.updater.check_for_updates()
-        if files_to_update:
-            print(f"Files to update: {len(files_to_update)}")  # Debug message
-            for i, file in enumerate(files_to_update, start=1):
-                self.update_progress.emit(10 + int((i / len(files_to_update)) * 80), f"Updating {file['name']}...")
-                self.updater.apply_updates([file])
+            files_to_update = self.updater.check_for_updates()
+            if files_to_update:
+                print(f"Files to update: {len(files_to_update)}")  # Debug message
+                for i, file in enumerate(files_to_update, start=1):
+                    self.update_progress.emit(
+                        10 + int((i / len(files_to_update)) * 80), f"Updating {file['name']}..."
+                    )
+                    self.updater.apply_updates([file])
 
-        self.update_progress.emit(100, "Updates complete!")
-        print("UpdateWorker finished.")  # Debug message
+            self.update_progress.emit(100, "Updates complete!")
+            print("UpdateWorker finished.")  # Debug message
+        except Exception as e:
+            self.update_progress.emit(0, f"Error during updates: {e}")
+            print(f"Error in UpdateWorker: {e}")

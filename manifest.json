@@ -1,7 +1,10 @@
 {
-	"version": "2.1.0",
     "files": [
-        
+        {
+            "name": ".gitattributes",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/.gitattributes",
+            "checksum": "dcb240655dcbf79b8706d11c8c2a169c"
+        },
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
@@ -85,12 +88,12 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "703e89fa8ac6600584e2db1299428241"
+            "checksum": "c964be58d85b78476dd2f6998776e751"
         },
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "55f5e95817b520bb5a7bd53e3227c744"
+            "checksum": "d8fe89b5ec28aeb3a42d255cb3b08a82"
         },
         {
             "name": "modules/xi_updater.py",
@@ -175,7 +178,7 @@
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/updater.cpython-311.pyc",
-            "checksum": "97f0989160f9057f1d945d1bda68f705"
+            "checksum": "0638c194b791c19d4cee745d0c168c85"
         },
         {
             "name": "modules/__pycache__/xi_updater.cpython-311.pyc",
