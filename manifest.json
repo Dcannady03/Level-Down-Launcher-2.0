@@ -1,5 +1,5 @@
 {
-    "version": "2.0.0",
+    "version": "2.1.0",
     "files": [
         {
             "name": ".gitattributes",
@@ -7,9 +7,19 @@
             "checksum": "05bdb783ee6514c8c072e47680af8ff7"
         },
         {
+            "name": "launcher.py",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
+            "checksum": "19d2bedfb13618c43502a9ec26cd9489"
+        },
+        {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "26d82195e1a7221fea205f5945ed4704"
+            "checksum": "63680f0f8c3e66b2cb2e99f4d11f5f80"
+        },
+        {
+            "name": "splash_screen.py",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
+            "checksum": "a9482574686cc1285be7ec95f1ac9872"
         },
         {
             "name": "assets/images/ashita.png",
@@ -69,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "19d2bedfb13618c43502a9ec26cd9489"
+            "checksum": "24e3edd532f44c200a52e28d44def078"
         },
         {
             "name": "modules/server_tabs.py",
@@ -89,12 +99,12 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "a9482574686cc1285be7ec95f1ac9872"
+            "checksum": "c1e09a5588b388b4c4f838be195db2d8"
         },
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "f74af48b9f8e30b74bb9b54291da0a67"
+            "checksum": "39c1552f3bac193ce52a1e5582105903"
         },
         {
             "name": "modules/xi_updater.py",
@@ -179,7 +189,7 @@
         {
             "name": "modules/__pycache__/updater.cpython-311.pyc",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__pycache__/updater.cpython-311.pyc",
-            "checksum": "1f1c0624e039ff90175079ef7adb91a8"
+            "checksum": "c949db1f919631b3430b9beefc634d79"
         },
         {
             "name": "modules/__pycache__/xi_updater.cpython-311.pyc",

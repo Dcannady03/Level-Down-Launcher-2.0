@@ -2,20 +2,20 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWid
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
 import os
+import sys
 
 
 class SplashScreen(QMainWindow):
     def __init__(self, updater):
         super().__init__()
-        self.updater = updater  # Store the updater instance
+        self.updater = updater
 
         self.setWindowTitle("Level Down Launcher - Updating")
         self.setGeometry(100, 100, 600, 400)
 
         # Background Image
+        pixmap = QPixmap(os.path.join(os.getcwd(), "assets/images/test6.png"))
         self.background = QLabel(self)
-        background_path = os.path.join("assets", "images", "test6.png")
-        pixmap = QPixmap(background_path)
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
         self.background.setGeometry(0, 0, 600, 400)
@@ -24,7 +24,7 @@ class SplashScreen(QMainWindow):
         self.overlay = QVBoxLayout()
 
         # Status Label
-        self.status_label = QLabel("Initializing...")
+        self.status_label = QLabel("Initializing updates...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
         self.status_label.setAlignment(Qt.AlignCenter)
@@ -55,31 +55,39 @@ class SplashScreen(QMainWindow):
         overlay_widget.setGeometry(50, 250, 500, 100)
 
         # Start the update process
-        self.worker = UpdateWorker(updater)
+        self.worker = UpdateWorker(self.updater)
         self.worker.update_progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_update_complete)
         self.worker.start()
 
     def update_progress(self, progress, message):
-        """Update the progress bar and status label."""
+        """Update progress bar and status label."""
         self.status_label.setText(message)
         self.progress_bar.setValue(progress)
 
     def on_update_complete(self, restart_required):
-        """Handle the completion of the update process."""
+        """Handle completion of updates."""
         if restart_required:
-            self.status_label.setText("Restarting application...")
-            print("Restart required. Exiting splash screen.")  # Debug message
-            os.execl(sys.executable, sys.executable, *sys.argv)
+            print("main.exe updated. Restarting application...")
+            python_executable = sys.executable
+            script_path = sys.argv[0]
+            os.execv(python_executable, [python_executable, script_path])
         else:
-            self.status_label.setText("Launching application...")
-            print("Update completed. Ready to launch.")  # Debug message
-            self.close()  # Close the splash screen
+            self.load_main_window()
 
+    def load_main_window(self):
+        """Transition to the main launcher."""
+        from modules.launcher import Launcher  # Import here to avoid circular imports
+        self.hide()  # Hide the splash screen
+        self.main_window = Launcher()  # Initialize the launcher
+        self.main_window.show()  # Show the launcher window
+
+
+from PyQt5.QtCore import QThread, pyqtSignal
 
 class UpdateWorker(QThread):
-    update_progress = pyqtSignal(int, str)
-    finished = pyqtSignal(bool)  # Signal whether a restart is required
+    update_progress = pyqtSignal(int, str)  # Progress: percentage and message
+    finished = pyqtSignal(bool)  # Whether a restart is required
 
     def __init__(self, updater):
         super().__init__()
@@ -89,28 +97,37 @@ class UpdateWorker(QThread):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Check for updates
+            # Step 1: Check for updates
             files_to_update = self.updater.check_for_updates()
             total_files = len(files_to_update)
 
+            # Determine if a restart is required
             restart_required = any(file["name"] == "main.exe" for file in files_to_update)
 
-            if total_files > 0:
-                print(f"Files to update: {total_files}")  # Debug message
+            if total_files == 0:
+                print("No updates found. All files are up to date.")  # Debug message
+                self.update_progress.emit(100, "No updates found.")
+                self.finished.emit(False)  # No restart required
+                return
 
-                # Apply updates with progress tracking
-                for i, file in enumerate(files_to_update, start=1):
+            print(f"Files to update: {total_files}")  # Debug message
+
+            # Step 2: Apply updates
+            for i, file in enumerate(files_to_update, start=1):
+                try:
                     self.update_progress.emit(
                         int((i / total_files) * 100), f"Updating {file['name']}..."
                     )
                     self.updater.download_file(file)
+                except Exception as e:
+                    print(f"Error updating {file['name']}: {e}")  # Debug message
+                    self.update_progress.emit(0, f"Error updating {file['name']}.")
 
+            # Step 3: Finalize
             self.update_progress.emit(100, "Updates complete!")
-            print("UpdateWorker finished.")  # Debug message
-
-            # Emit finished signal
+            print("UpdateWorker finished successfully.")  # Debug message
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Error in UpdateWorker: {e}")
-            self.update_progress.emit(0, f"Error: {e}")
+            print(f"Critical error in UpdateWorker: {e}")  # Debug message
+            self.update_progress.emit(0, f"Critical error: {e}")
             self.finished.emit(False)

@@ -1,5 +1,8 @@
+import os
 import requests
-import json
+import hashlib
+import subprocess
+import sys
 
 class Updater:
     MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
@@ -7,24 +10,18 @@ class Updater:
     def __init__(self, enable_updates=True):
         self.enable_updates = enable_updates
         self.manifest = None
+        self.local_version = "2.1.0"  # Update this with your current version
 
     def fetch_manifest(self):
         """Fetch the remote manifest."""
         try:
-            print(f"Fetching manifest from: {self.MANIFEST_URL}")  # Debug URL
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
-            print("Manifest fetch response status:", response.status_code)  # Debug HTTP status
-            print("Manifest raw content:", response.text[:200])  # Debug raw response
             self.manifest = response.json()
-            print("Manifest parsed successfully.")
-        except requests.RequestException as e:
+            print("Manifest fetched successfully.")
+        except Exception as e:
             print(f"Error fetching manifest: {e}")
             self.manifest = None
-        except json.JSONDecodeError as e:
-            print(f"Error parsing manifest JSON: {e}")
-            self.manifest = None
-
 
     def calculate_checksum(self, file_path):
         """Calculate the checksum of a local file."""
@@ -96,10 +93,6 @@ class Updater:
             print("Manifest fetch failed. Aborting updates.")
             return
 
-        if not self.manifest.get("files"):
-            print("Manifest is valid but contains no files. Skipping updates.")
-            return
-
         if self.is_new_version():
             print(f"New version available: {self.manifest['version']}")
 
@@ -107,8 +100,9 @@ class Updater:
         if updates:
             print(f"Found {len(updates)} file(s) to update.")
             self.apply_updates(updates)
-            if any(file["name"] == "main.exe" for file in updates):
-                print("main.exe updated. Restarting...")
+            if any(file["name"] == "main.py" for file in updates):
+                print("main.py updated. Restarting...")
                 self.restart_application()
         else:
             print("All files are up to date.")
+
