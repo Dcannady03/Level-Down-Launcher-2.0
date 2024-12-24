@@ -67,9 +67,20 @@ class Settings(QWidget):
         try:
             with open(SETTINGS_FILE, "w") as f:
                 json.dump(self.settings, f, indent=4)
-            QMessageBox.information(self, "Settings", "Settings have been saved successfully!")
+            print("Settings saved successfully!")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to save settings: {e}")
+
+    def save_close_after_launch_setting(self):
+        """Save the 'Close After Launch' setting to the JSON file."""
+        self.settings["close_after_launch"] = self.close_after_launch_checkbox.isChecked()
+        self.save_settings()
+
+    def ensure_setting_exists(self, key, default_value):
+        """Ensure a specific setting exists in the JSON file."""
+        if key not in self.settings:
+            self.settings[key] = default_value
+            self.save_settings()
 
     def save_close_after_launch_setting(self):
         """Save the 'Close After Launch' setting to the JSON file."""
@@ -82,3 +93,4 @@ class Settings(QWidget):
         if selected_dir:
             self.settings[key] = selected_dir
             label.setText(f"{key.replace('_', ' ').title()}: {selected_dir}")
+            self.save_settings()
