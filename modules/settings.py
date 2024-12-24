@@ -1,7 +1,6 @@
 import os
 import json
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, QMessageBox
-
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, QMessageBox, QCheckBox
 
 SETTINGS_FILE = "settings.json"
 
@@ -39,6 +38,12 @@ class Settings(QWidget):
         self.ffxi_button.clicked.connect(lambda: self.browse_directory("ffxi_dir", self.ffxi_label))
         layout.addWidget(self.ffxi_button)
 
+        # Checkbox for closing launcher after launch
+        self.close_after_launch_checkbox = QCheckBox("Close Launcher After Launch")
+        self.close_after_launch_checkbox.setChecked(self.settings.get("close_after_launch", False))
+        self.close_after_launch_checkbox.stateChanged.connect(self.save_close_after_launch_setting)
+        layout.addWidget(self.close_after_launch_checkbox)
+
         # Save button
         self.save_button = QPushButton("Save Settings")
         self.save_button.clicked.connect(self.save_settings)
@@ -61,6 +66,11 @@ class Settings(QWidget):
             QMessageBox.information(self, "Settings", "Settings have been saved successfully!")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to save settings: {e}")
+
+    def save_close_after_launch_setting(self):
+        """Save the 'Close After Launch' setting to the JSON file."""
+        self.settings["close_after_launch"] = self.close_after_launch_checkbox.isChecked()
+        self.save_settings()
 
     def browse_directory(self, key, label):
         """Open a dialog to browse for a directory."""

@@ -121,20 +121,26 @@ class Sidebar(QWidget):
     def launch_ashita(self):
         settings = self.load_settings()
         ashita_dir = settings.get("ashita_dir")
+        close_after_launch = settings.get("close_after_launch", False)
+
         if not ashita_dir:
             self.show_popup("Please set the directory for Ashita in the Settings tab.")
-            print("Ashita directory is not set in settings.json.")
         else:
-            print(f"Launching Ashita from directory: {ashita_dir}")
             self.launch_executable(ashita_dir, "Ashita.exe")
+            if close_after_launch:
+                self.parentWidget().close()  # Close the launcher
 
     def launch_windower(self):
         settings = self.load_settings()
         windower_dir = settings.get("windower_dir")
+        close_after_launch = settings.get("close_after_launch", False)
+
         if not windower_dir:
             self.show_popup("Please set the directory for Windower in the Settings tab.")
         else:
             self.launch_executable(windower_dir, "Windower.exe")
+            if close_after_launch:
+                self.parentWidget().close()  # Close the launcher
 
     def open_wiki(self):
         """Open the Wiki URL."""
