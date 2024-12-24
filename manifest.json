@@ -94,7 +94,7 @@
         {
             "name": "modules/splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/splash_screen.py",
-            "checksum": "ba5727c18dc86e7b5af5fea6e5719a67"
+            "checksum": "f587ace673241560bd821662ec62edf7"
         },
         {
             "name": "modules/updater.py",

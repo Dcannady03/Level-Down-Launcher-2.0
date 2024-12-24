@@ -10,12 +10,16 @@ import hashlib
 class SplashScreen(QMainWindow):
     def __init__(self):
         super().__init__()
+        print("Initializing SplashScreen...")  # Debug message
+
         self.setWindowTitle("Level Down Launcher - Updating")
         self.setGeometry(100, 100, 600, 400)
 
         # Background Image
         self.background = QLabel(self)
         background_path = os.path.join("assets", "images", "test6.png")
+        if not os.path.exists(background_path):
+            print(f"Background image not found: {background_path}")  # Debug error
         pixmap = QPixmap(background_path)
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
@@ -164,6 +168,7 @@ class UpdateWorker(QThread):
 
 
 if __name__ == "__main__":
+    print("Starting splash screen...")  # Debug message
     app = QApplication(sys.argv)
     splash = SplashScreen()  # Create the splash screen
     splash.show()  # Show the splash screen
