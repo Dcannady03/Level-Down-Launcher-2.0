@@ -15,6 +15,14 @@ class Settings(QWidget):
     def initUI(self):
         """Initialize the UI components."""
         layout = QVBoxLayout()
+        # Checkbox for closing launcher after launch
+        self.close_after_launch_checkbox = QCheckBox("Close Launcher After Launch")
+        self.ensure_setting_exists("close_after_launch", False)  # Ensure the setting exists in the JSON file
+        self.close_after_launch_checkbox.setChecked(self.settings.get("close_after_launch", False))
+        self.close_after_launch_checkbox.stateChanged.connect(self.save_close_after_launch_setting)
+        layout.addWidget(self.close_after_launch_checkbox)
+
+        
 
         # Labels for paths
         self.ashita_label = QLabel(f"Ashita Directory: {self.settings.get('ashita_dir', 'Not Set')}")
@@ -38,11 +46,7 @@ class Settings(QWidget):
         self.ffxi_button.clicked.connect(lambda: self.browse_directory("ffxi_dir", self.ffxi_label))
         layout.addWidget(self.ffxi_button)
 
-        # Checkbox for closing launcher after launch
-        self.close_after_launch_checkbox = QCheckBox("Close Launcher After Launch")
-        self.close_after_launch_checkbox.setChecked(self.settings.get("close_after_launch", False))
-        self.close_after_launch_checkbox.stateChanged.connect(self.save_close_after_launch_setting)
-        layout.addWidget(self.close_after_launch_checkbox)
+        
 
         # Save button
         self.save_button = QPushButton("Save Settings")

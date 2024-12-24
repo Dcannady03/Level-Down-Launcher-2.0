@@ -89,7 +89,7 @@
         {
             "name": "modules/settings.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/settings.py",
-            "checksum": "5732c8059b696dbdc822afaace54db6b"
+            "checksum": "d2b6d4ba800f3a02a03ce53c6441f7f3"
         },
         {
             "name": "modules/sidebar.py",
