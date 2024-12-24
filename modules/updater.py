@@ -15,13 +15,18 @@ class Updater:
     def fetch_manifest(self):
         """Fetch the remote manifest."""
         try:
+            print(f"Fetching manifest from {self.MANIFEST_URL}...")  # Debug log
             response = requests.get(self.MANIFEST_URL)
-            response.raise_for_status()
+            response.raise_for_status()  # Raise an error for bad HTTP responses
             self.manifest = response.json()
-            print("Manifest fetched successfully.")
-        except Exception as e:
+            print(f"Manifest fetched successfully: {response.text[:200]}...")  # Log first 200 chars
+        except requests.RequestException as e:
             print(f"Error fetching manifest: {e}")
             self.manifest = None
+        except json.JSONDecodeError as e:
+            print(f"Error parsing manifest JSON: {e}")
+            self.manifest = None
+
 
     def calculate_checksum(self, file_path):
         """Calculate the checksum of a local file."""
