@@ -1,13 +1,11 @@
 from PyQt5.QtWidgets import QApplication
 from modules.splash_screen import SplashScreen
 from modules.updater import Updater
-from modules.launcher import Launcher
 import os
 import sys
 
 # Retain global references
 splash = None
-launcher = None
 
 
 def load_dark_theme(app):
@@ -25,7 +23,7 @@ def load_dark_theme(app):
 
 
 def main():
-    global splash, launcher  # Declare globals
+    global splash  # Declare global splash screen reference
 
     print("Starting the application...")  # Debug message
 
@@ -36,25 +34,9 @@ def main():
     load_dark_theme(app)
 
     # Step 3: Initialize updater and splash screen
-    enable_updates = True  # Enable updates
-    updater = Updater(enable_updates=enable_updates)
-    splash = SplashScreen(updater)
-    splash.show()
-
-    # Function to load the main launcher after updates
-    def load_main_window():
-        global launcher  # Retain reference to launcher
-        try:
-            print("Loading main launcher...")  # Debug message
-            splash.hide()  # Hide splash screen
-            launcher = Launcher()  # Initialize the launcher
-            launcher.show()  # Show the launcher window
-            print("Launcher is now visible.")  # Debug message
-        except Exception as e:
-            print(f"Error loading launcher: {e}")  # Debug error message
-
-    # Connect splash worker's signal to load the main window
-    splash.worker.finished.connect(load_main_window)
+    updater = Updater(enable_updates=True)  # Enable updates
+    splash = SplashScreen(updater)  # Pass updater to splash screen
+    splash.show()  # Show splash screen
 
     # Step 4: Start the application event loop
     sys.exit(app.exec_())

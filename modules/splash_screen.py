@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont
-import sys
 import os
+import sys
 
 
 class SplashScreen(QMainWindow):
     def __init__(self, updater):
         super().__init__()
-        self.updater = updater  # Store the updater instance
+        self.updater = updater
 
         self.setWindowTitle("Level Down Launcher - Updating")
         self.setGeometry(100, 100, 600, 400)
@@ -55,7 +55,7 @@ class SplashScreen(QMainWindow):
         overlay_widget.setGeometry(50, 250, 500, 100)
 
         # Start the update process
-        self.worker = UpdateWorker(updater)
+        self.worker = UpdateWorker(self.updater)
         self.worker.update_progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_update_complete)
         self.worker.start()
@@ -73,14 +73,16 @@ class SplashScreen(QMainWindow):
             script_path = sys.argv[0]
             os.execv(python_executable, [python_executable, script_path])
         else:
-            self.hide()
             self.load_main_window()
 
     def load_main_window(self):
         """Transition to the main launcher."""
         from modules.launcher import Launcher  # Import here to avoid circular imports
-        self.main_window = Launcher()
-        self.main_window.show()
+        self.hide()  # Hide the splash screen
+        self.main_window = Launcher()  # Initialize the launcher
+        self.main_window.show()  # Show the launcher window
+
+
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class UpdateWorker(QThread):

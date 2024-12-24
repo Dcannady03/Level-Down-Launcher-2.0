@@ -15,6 +15,9 @@ OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 SKIP_FOLDERS = [".git"]
 SKIP_FILES = ["manifest.py", "manifest.json"]
 
+# Manifest version
+MANIFEST_VERSION = "2.1.0"
+
 
 def calculate_checksum(file_path):
     """Calculate the MD5 checksum of a file."""
@@ -25,9 +28,9 @@ def calculate_checksum(file_path):
     return hash_md5.hexdigest()
 
 
-def generate_manifest(base_dir, base_url):
+def generate_manifest(base_dir, base_url, version):
     """Generate a manifest of files in the directory."""
-    manifest = {"files": []}
+    manifest = {"version": version, "files": []}  # Include version at the top
 
     for root, dirs, files in os.walk(base_dir):
         # Skip specified folders
@@ -64,8 +67,8 @@ def save_manifest(manifest, output_file):
 
 
 if __name__ == "__main__":
-    # Generate the manifest
-    manifest = generate_manifest(BASE_DIR, BASE_URL)
+    # Generate the manifest with the specified version
+    manifest = generate_manifest(BASE_DIR, BASE_URL, MANIFEST_VERSION)
 
     # Save the manifest to the output file
     save_manifest(manifest, OUTPUT_FILE)
