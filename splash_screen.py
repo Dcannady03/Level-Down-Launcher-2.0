@@ -6,6 +6,18 @@ import sys
 import requests
 import hashlib
 
+def apply_dark_theme(app):
+    """Load and apply the dark theme stylesheet."""
+    theme_path = os.path.join(os.getcwd(), "assets", "styles", "dark_theme.qss")
+    if os.path.exists(theme_path):
+        try:
+            with open(theme_path, "r") as file:
+                app.setStyleSheet(file.read())
+            print(f"Dark theme loaded from {theme_path}")
+        except Exception as e:
+            print(f"Error loading dark theme: {e}")
+    else:
+        print(f"Dark theme not found at {theme_path}. Using default styles.")
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -196,6 +208,7 @@ class UpdateWorker(QThread):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    apply_dark_theme(app)  # Apply the dark theme before showing any UI
     splash = SplashScreen()
     splash.show()
     sys.exit(app.exec_())
