@@ -4,7 +4,7 @@ import hashlib
 
 class Updater:
     # Updated manifest URL
-    MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
+    MANIFEST_URL = "https://raw.github.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
 
     def __init__(self, enable_updates=True):
         self.enable_updates = enable_updates
