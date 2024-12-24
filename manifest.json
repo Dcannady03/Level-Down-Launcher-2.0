@@ -79,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "9b1cf2715cf35e52edbc7ce885d5c646"
+            "checksum": "1ef5630abea1eb4d85fbb3b487777a78"
         },
         {
             "name": "modules/server_tabs.py",

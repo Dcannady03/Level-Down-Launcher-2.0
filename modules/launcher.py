@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QWidget
-from PyQt5.QtGui import QPalette, QBrush, QPixmap  # For setting background
+from PyQt5.QtGui import QPalette, QBrush, QPixmap, QIcon  # For setting background
 from modules.sidebar import Sidebar
 from modules.dashboard import Dashboard
 from modules.server_tabs.level_down_99 import LevelDown99Tab
@@ -14,8 +14,10 @@ from PyQt5.QtCore import Qt
 class Launcher(QMainWindow):
     def __init__(self):
         super().__init__()
+        icon_path = os.path.join("assets", "images", "test6.ico")
+        self.setWindowIcon(QIcon(icon_path))
         print("Initializing Launcher...")  # Debug message
-        self.setWindowTitle("Level Down Launcher 2.0")
+        self.setWindowTitle("Level Down Launcher")
         self.setGeometry(100, 100, 800, 600)
 
         # Set the background image
