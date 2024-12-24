@@ -8,6 +8,7 @@ import hashlib
 import shutil
 import atexit  # Import atexit for cleanup
 import subprocess
+import time
 
 os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(os.getcwd(), "PyQt5", "Qt", "plugins", "platforms")
 # Register a cleanup function to avoid errors
@@ -108,11 +109,13 @@ class SplashScreen(QMainWindow):
         """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            print("Restart required. Exiting splash screen.")  # Debug message
+            print("Restart required. Restarting application.")  # Debug message
             os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.status_label.setText("Launching application...")
-            print("Update completed. Ready to launch.")  # Debug message
+            print("Update completed. Launching main window.")  # Debug message
+            time.sleep(2)  # Add a delay before switching to the launcher
+
             self.load_main_window()
 
     def load_main_window(self):
