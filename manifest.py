@@ -11,12 +11,12 @@ BASE_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0
 # Output file for the manifest
 OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 
-# Files and folders to skip
-SKIP_FOLDERS = [".git"]
-SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes"]
-
 # Manifest version
 MANIFEST_VERSION = "2.1.0"
+
+# Files and folders to skip
+SKIP_FOLDERS = [".git", ".vs", "__pycache__"]
+SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes"]
 
 
 def calculate_checksum(file_path):
@@ -30,7 +30,7 @@ def calculate_checksum(file_path):
 
 def generate_manifest(base_dir, base_url, version):
     """Generate a manifest of files in the directory."""
-    manifest = {"version": version, "files": []}  # Include version at the top
+    manifest = {"version": version, "files": []}
 
     for root, dirs, files in os.walk(base_dir):
         # Skip specified folders
@@ -43,18 +43,21 @@ def generate_manifest(base_dir, base_url, version):
 
             file_path = os.path.join(root, file_name)
 
-            # Calculate relative path
-            relative_path = os.path.relpath(file_path, base_dir).replace("\\", "/")
+            try:
+                # Calculate relative path
+                relative_path = os.path.relpath(file_path, base_dir).replace("\\", "/")
 
-            # Calculate checksum
-            checksum = calculate_checksum(file_path)
+                # Calculate checksum
+                checksum = calculate_checksum(file_path)
 
-            # Append file details to the manifest
-            manifest["files"].append({
-                "name": relative_path,
-                "url": f"{base_url}/{relative_path}",
-                "checksum": checksum
-            })
+                # Append file details to the manifest
+                manifest["files"].append({
+                    "name": relative_path,
+                    "url": f"{base_url}/{relative_path}",
+                    "checksum": checksum
+                })
+            except PermissionError:
+                print(f"Permission denied: {file_path}. Skipping...")
 
     return manifest
 
@@ -67,9 +70,8 @@ def save_manifest(manifest, output_file):
 
 
 if __name__ == "__main__":
-    # Generate the manifest with the specified version
+    # Generate the manifest
     manifest = generate_manifest(BASE_DIR, BASE_URL, MANIFEST_VERSION)
 
     # Save the manifest to the output file
     save_manifest(manifest, OUTPUT_FILE)
-

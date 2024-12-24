@@ -7,6 +7,13 @@ import requests
 import hashlib
 
 
+from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtGui import QPixmap, QFont
+import os
+import sys
+
+
 class SplashScreen(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -59,11 +66,9 @@ class SplashScreen(QMainWindow):
         overlay_widget.setLayout(self.overlay)
         overlay_widget.setGeometry(50, 250, 500, 100)
 
-        # Start the update process
-        self.worker = UpdateWorker()
-        self.worker.update_progress.connect(self.update_progress)
-        self.worker.finished.connect(self.on_update_complete)
-        self.worker.start()
+        print("SplashScreen initialized.")  # Debug message
+
+
 
     def update_progress(self, progress, message):
         """Update the progress bar and status label."""
