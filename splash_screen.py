@@ -88,38 +88,41 @@ class UpdateWorker(QThread):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Fetch the manifest
-            manifest = self.fetch_manifest()
-            if not manifest:
-                print("No manifest available. Skipping update check.")
-                self.finished.emit(False)
-                return
-
-            # Check for updates
-            files_to_update = self.check_for_updates(manifest)
+            # Step 1: Check for updates
+            files_to_update = self.updater.check_for_updates()  # No additional arguments
             total_files = len(files_to_update)
 
-            restart_required = any(file["name"] == "main.py" for file in files_to_update)
+            # Determine if a restart is required
+            restart_required = any(file["name"] == "main.exe" for file in files_to_update)
 
-            if total_files > 0:
-                print(f"Files to update: {total_files}")  # Debug message
+            if total_files == 0:
+                print("No updates found. All files are up to date.")  # Debug message
+                self.update_progress.emit(100, "No updates found.")
+                self.finished.emit(False)  # No restart required
+                return
 
-                # Apply updates with progress tracking
-                for i, file in enumerate(files_to_update, start=1):
+            print(f"Files to update: {total_files}")  # Debug message
+
+            # Step 2: Apply updates
+            for i, file in enumerate(files_to_update, start=1):
+                try:
                     self.update_progress.emit(
                         int((i / total_files) * 100), f"Updating {file['name']}..."
                     )
-                    self.download_file(file)
+                    self.updater.download_file(file)
+                except Exception as e:
+                    print(f"Error updating {file['name']}: {e}")  # Debug message
+                    self.update_progress.emit(0, f"Error updating {file['name']}.")
 
+            # Step 3: Finalize
             self.update_progress.emit(100, "Updates complete!")
-            print("UpdateWorker finished.")  # Debug message
-
-            # Emit finished signal
+            print("UpdateWorker finished successfully.")  # Debug message
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Error in UpdateWorker: {e}")
-            self.update_progress.emit(0, f"Error: {e}")
+            print(f"Critical error in UpdateWorker: {e}")  # Debug message
+            self.update_progress.emit(0, f"Critical error: {e}")
             self.finished.emit(False)
+
 
     def fetch_manifest(self):
         try:
@@ -139,13 +142,30 @@ class UpdateWorker(QThread):
                 sha256.update(chunk)
         return sha256.hexdigest()
 
-    def check_for_updates(self, manifest):
+    def check_for_updates(self):
         """Check for files that need updates."""
+        if not self.enable_updates:
+            print("Updates are disabled.")
+            return []
+
+        if not self.manifest:
+            print("No manifest available. Skipping update check.")
+            return []
+
         updates = []
-        for file in manifest.get("files", []):
+        for file in self.manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+            if not os.path.exists(local_path):
+                print(f"File missing: {file['name']}")  # Debug message
                 updates.append(file)
+            else:
+                # Compare checksums
+                local_checksum = self.calculate_checksum(local_path)
+                print(f"File: {file['name']} | Local checksum: {local_checksum} | Manifest checksum: {file['checksum']}")  # Debug message
+                if local_checksum != file["checksum"]:
+                    print(f"Checksum mismatch for: {file['name']}")  # Debug message
+                    updates.append(file)
+
         return updates
 
     def download_file(self, file):

@@ -14,7 +14,7 @@
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "ba5727c18dc86e7b5af5fea6e5719a67"
+            "checksum": "63a0eec73ff7c6cda64cd26222a8a443"
         },
         {
             "name": "assets/images/ashita.png",
@@ -39,7 +39,7 @@
         {
             "name": "assets/images/wallpaper3.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/wallpaper3.png",
-            "checksum": "1bf3a526b5f8515605272f112c43d4bf"
+            "checksum": "14af06c5c18cb253bb66c8faa5b6469a"
         },
         {
             "name": "assets/images/wiki.png",
@@ -69,7 +69,7 @@
         {
             "name": "modules/dashboard.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/dashboard.py",
-            "checksum": "89ae1a19d052df25c2af9266c69673fa"
+            "checksum": "8218d3f0a1110e52cc89aa511751b603"
         },
         {
             "name": "modules/launcher.py",
@@ -79,17 +79,17 @@
         {
             "name": "modules/server_tabs.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs.py",
-            "checksum": "09bc2faad1e986f8d2b9ae9abb5c33ef"
+            "checksum": "e823a08424274528f60d6daea807544f"
         },
         {
             "name": "modules/settings.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/settings.py",
-            "checksum": "8864f973b83343be7904c6a876b29cfb"
+            "checksum": "5f7dcb75c444fe83d24e28e28e3d8989"
         },
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "ac56ed258ae67134eccae56da7411d04"
+            "checksum": "6216123be8d22f3e511f4bacd7593dba"
         },
         {
             "name": "modules/splash_screen.py",
@@ -119,7 +119,7 @@
         {
             "name": "modules/server_tabs/level_down_75_era.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/level_down_75_era.py",
-            "checksum": "edba547a8ab1cc9ecc9c06346d5aae57"
+            "checksum": "1f5ffdff80e91206abd718f58bad88d5"
         },
         {
             "name": "modules/server_tabs/level_down_99.py",
