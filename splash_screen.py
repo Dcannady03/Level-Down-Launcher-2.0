@@ -8,6 +8,8 @@ import hashlib
 import shutil
 import atexit  # Import atexit for cleanup
 import subprocess
+
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(os.getcwd(), "PyQt5", "Qt", "plugins", "platforms")
 # Register a cleanup function to avoid errors
 def cleanup_temp():
     temp_dir = getattr(sys, '_MEIPASS', None)
