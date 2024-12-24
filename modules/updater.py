@@ -1,8 +1,5 @@
-import os
 import requests
-import hashlib
-import subprocess
-import sys
+import json
 
 class Updater:
     MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
@@ -10,16 +7,17 @@ class Updater:
     def __init__(self, enable_updates=True):
         self.enable_updates = enable_updates
         self.manifest = None
-        self.local_version = "1.0.0"  # Replace with your current version
 
     def fetch_manifest(self):
         """Fetch the remote manifest."""
         try:
-            print(f"Fetching manifest from {self.MANIFEST_URL}...")  # Debug log
+            print(f"Fetching manifest from: {self.MANIFEST_URL}")  # Debug URL
             response = requests.get(self.MANIFEST_URL)
-            response.raise_for_status()  # Raise an error for bad HTTP responses
+            response.raise_for_status()
+            print("Manifest fetch response status:", response.status_code)  # Debug HTTP status
+            print("Manifest raw content:", response.text[:200])  # Debug raw response
             self.manifest = response.json()
-            print(f"Manifest fetched successfully: {response.text[:200]}...")  # Log first 200 chars
+            print("Manifest parsed successfully.")
         except requests.RequestException as e:
             print(f"Error fetching manifest: {e}")
             self.manifest = None
