@@ -12,7 +12,7 @@ BASE_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0
 OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 
 # Manifest version
-MANIFEST_VERSION = "2.1.1"
+MANIFEST_VERSION = "2.1.2"
 
 # Files and folders to skip
 SKIP_FOLDERS = [".git", ".vs", "__pycache__", "build", "dist"]
