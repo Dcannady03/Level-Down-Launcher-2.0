@@ -90,19 +90,21 @@ class UpdateWorker(QThread):
     finished = pyqtSignal(bool)  # Signal whether a restart is required
 
     MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
+    SKIP_FOLDERS = [".git", ".vs", "__pycache__"]
+    SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes", ".gitignore", "settings.json"]
 
     def run(self):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Fetch the manifest
+            # Step 1: Fetch the manifest
             manifest = self.fetch_manifest()
             if not manifest:
                 self.update_progress.emit(0, "Failed to fetch manifest.")
                 self.finished.emit(False)
                 return
 
-            # Check for updates
+            # Step 2: Check for updates
             files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
 
@@ -117,22 +119,24 @@ class UpdateWorker(QThread):
 
             print(f"Files to update: {total_files}")  # Debug message
 
-            # Apply updates
+            # Step 3: Apply updates
             for i, file in enumerate(files_to_update, start=1):
                 self.update_progress.emit(
                     int((i / total_files) * 100), f"Updating {file['name']}..."
                 )
                 self.download_file(file)
 
+            # Step 4: Finalize
             self.update_progress.emit(100, "Updates complete!")
             print("UpdateWorker finished successfully.")  # Debug message
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Critical error in UpdateWorker: {e}")
+            print(f"Critical error in UpdateWorker: {e}")  # Debug message
             self.update_progress.emit(0, f"Critical error: {e}")
             self.finished.emit(False)
 
     def fetch_manifest(self):
+        """Fetch the manifest from the URL."""
         try:
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
@@ -143,24 +147,35 @@ class UpdateWorker(QThread):
             return None
 
     def calculate_checksum(self, file_path):
-        """Calculate the checksum of a local file."""
-        sha256 = hashlib.sha256()
+        """Calculate the checksum of a local file using MD5."""
+        hash_md5 = hashlib.md5()
         with open(file_path, "rb") as f:
-            while chunk := f.read(8192):
-                sha256.update(chunk)
-        return sha256.hexdigest()
+            while chunk := f.read(4096):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
 
     def check_for_updates(self, manifest):
         """Check for files that need updates."""
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
+
+            # Skip specified folders and files
+            if any(skip in local_path for skip in self.SKIP_FOLDERS) or os.path.basename(local_path) in self.SKIP_FILES:
+                print(f"Skipping: {local_path}")  # Debug message
+                continue
+
             if not os.path.exists(local_path):
+                print(f"File missing: {file['name']}")  # Debug message
                 updates.append(file)
             else:
+                # Compare checksums
                 local_checksum = self.calculate_checksum(local_path)
                 if local_checksum != file["checksum"]:
+                    print(f"Checksum mismatch for: {file['name']}")  # Debug message
                     updates.append(file)
+                else:
+                    print(f"File up to date: {file['name']}")  # Debug message
         return updates
 
     def download_file(self, file):
@@ -176,6 +191,7 @@ class UpdateWorker(QThread):
             print(f"Updated: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
+
 
 
 if __name__ == "__main__":

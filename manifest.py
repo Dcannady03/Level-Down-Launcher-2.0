@@ -16,7 +16,7 @@ MANIFEST_VERSION = "2.1.0"
 
 # Files and folders to skip
 SKIP_FOLDERS = [".git", ".vs", "__pycache__"]
-SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes", ".gitignore"]
+SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes", ".gitignore", "settings.json"]
 
 
 def calculate_checksum(file_path):
