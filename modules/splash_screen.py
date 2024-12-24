@@ -86,8 +86,8 @@ class SplashScreen(QMainWindow):
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class UpdateWorker(QThread):
-    update_progress = pyqtSignal(int, str)
-    finished = pyqtSignal(bool)  # Signal whether a restart is required
+    update_progress = pyqtSignal(int, str)  # Progress: percentage and message
+    finished = pyqtSignal(bool)  # Whether a restart is required
 
     def __init__(self, updater):
         super().__init__()
@@ -97,28 +97,37 @@ class UpdateWorker(QThread):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Check for updates
+            # Step 1: Check for updates
             files_to_update = self.updater.check_for_updates()
             total_files = len(files_to_update)
 
+            # Determine if a restart is required
             restart_required = any(file["name"] == "main.exe" for file in files_to_update)
 
-            if total_files > 0:
-                print(f"Files to update: {total_files}")  # Debug message
+            if total_files == 0:
+                print("No updates found. All files are up to date.")  # Debug message
+                self.update_progress.emit(100, "No updates found.")
+                self.finished.emit(False)  # No restart required
+                return
 
-                # Apply updates with progress tracking
-                for i, file in enumerate(files_to_update, start=1):
+            print(f"Files to update: {total_files}")  # Debug message
+
+            # Step 2: Apply updates
+            for i, file in enumerate(files_to_update, start=1):
+                try:
                     self.update_progress.emit(
                         int((i / total_files) * 100), f"Updating {file['name']}..."
                     )
                     self.updater.download_file(file)
+                except Exception as e:
+                    print(f"Error updating {file['name']}: {e}")  # Debug message
+                    self.update_progress.emit(0, f"Error updating {file['name']}.")
 
+            # Step 3: Finalize
             self.update_progress.emit(100, "Updates complete!")
-            print("UpdateWorker finished.")  # Debug message
-
-            # Emit finished signal
+            print("UpdateWorker finished successfully.")  # Debug message
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Error in UpdateWorker: {e}")
-            self.update_progress.emit(0, f"Error: {e}")
+            print(f"Critical error in UpdateWorker: {e}")  # Debug message
+            self.update_progress.emit(0, f"Critical error: {e}")
             self.finished.emit(False)
