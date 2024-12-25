@@ -54,7 +54,7 @@ class Sidebar(QWidget):
         image_label = QLabel()
         pixmap = QPixmap(image_path)
         if not pixmap.isNull():
-            scaled_pixmap = pixmap.scaled(80, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled_pixmap = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             image_label.setPixmap(scaled_pixmap)
         else:
             image_label.setText("Image Missing")
