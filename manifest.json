@@ -2,11 +2,6 @@
     "version": "2.1.2",
     "files": [
         {
-            "name": "base_library.zip",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/base_library.zip",
-            "checksum": "28bf55fec546af2521db48c9b18e937a"
-        },
-        {
             "name": "launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
             "checksum": "19d2bedfb13618c43502a9ec26cd9489"
@@ -15,16 +10,6 @@
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
             "checksum": "bcefae5388efa1ed2dbb3cf1c9df634b"
-        },
-        {
-            "name": "New Text Document.txt",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/New Text Document.txt",
-            "checksum": "d41d8cd98f00b204e9800998ecf8427e"
-        },
-        {
-            "name": "setup.py",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/setup.py",
-            "checksum": "67264191d44868b852a1b4092e519945"
         },
         {
             "name": "splash_screen.py",
