@@ -77,3 +77,7 @@ splash_screen.dist/zstandard/backend_c.pyd
 .vs/PythonSettings.json
 .vs/slnx.sqlite
 base_library.zip
+/dist
+/build
+setup.py
+requirements.txt

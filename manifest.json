@@ -12,9 +12,14 @@
             "checksum": "bcefae5388efa1ed2dbb3cf1c9df634b"
         },
         {
+            "name": "requirements.txt",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/requirements.txt",
+            "checksum": "bf1ff7cd40d9a0869cab709d7cf4866c"
+        },
+        {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "627defe66bff435fa01c4770ecc8a515"
+            "checksum": "dbc8c787ca2fa116a7d8ac3b781b797b"
         },
         {
             "name": "assets/images/ashita.png",

@@ -9,18 +9,10 @@ import shutil
 import atexit  # Import atexit for cleanup
 import subprocess
 import time
-
-if getattr(sys, "frozen", False):  # If running as a bundled executable
-    # Use sys._MEIPASS to locate bundled resources
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(sys._MEIPASS, "platforms")
-    base_library_path = os.path.join(sys._MEIPASS, "base_library.zip")
-else:  # If running in a development environment
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(
-        "C:/Users/dcann/AppData/Local/Programs/Python/Python311/Lib/site-packages/PyQt5/Qt5/plugins/platforms"
-    )
-    base_library_path = os.path.join(os.getcwd(), "base_library.zip")
-
-print(f"Using base_library.zip from: {base_library_path}")
+from PyQt5.QtCore import QCoreApplication
+# Set the path to the 'platforms' directory
+qt_platform_plugins_path = os.path.join(os.path.dirname(__file__), "platforms")
+QCoreApplication.addLibraryPath(qt_platform_plugins_path)
 
 
 # Register a cleanup function to avoid errors
