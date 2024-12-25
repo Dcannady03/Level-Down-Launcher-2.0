@@ -127,13 +127,17 @@ class SplashScreen(QMainWindow):
             self.status_label.setText("Error restarting application. Please restart manually.")
 
     def load_main_window(self):
+        """Transition to the main launcher."""
         try:
-            from launcher import Launcher
-            self.hide()
-            self.main_window = Launcher()
-            self.main_window.show()
+            print("Loading Launcher...")
+            from launcher import Launcher  # Import here to avoid circular imports
+            self.hide()  # Hide the splash screen
+            self.main_window = Launcher()  # Initialize the launcher
+            self.main_window.show()  # Show the launcher window
+            print("Launcher loaded successfully.")
         except Exception as e:
-            print(f"Error loading launcher: {e}")
+            print(f"Error loading Launcher: {e}")
+            self.status_label.setText(f"Error: {e}")
 
 
 
