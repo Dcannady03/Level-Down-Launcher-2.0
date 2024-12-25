@@ -9,17 +9,12 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "82a12832df6f327eaddbc76496af9262"
-        },
-        {
-            "name": "requirements.txt",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/requirements.txt",
-            "checksum": "bf1ff7cd40d9a0869cab709d7cf4866c"
+            "checksum": "cfaafb822c5c9de9fc903c890c09f2c7"
         },
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "95640ffe1dbc381208dc1a48255c0f7f"
+            "checksum": "5709b37ffcbde90b23cbc396669ca49f"
         },
         {
             "name": "assets/images/ashita.png",
@@ -84,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "1ef5630abea1eb4d85fbb3b487777a78"
+            "checksum": "82c6296f2cc0403c7337da8b86554e96"
         },
         {
             "name": "modules/server_tabs.py",
@@ -99,7 +94,7 @@
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "a0fedc6460bc7d2dc9df4c173c90816e"
+            "checksum": "69a7863d6dcda860d264d2bbb5a46123"
         },
         {
             "name": "modules/splash_screen.py",
