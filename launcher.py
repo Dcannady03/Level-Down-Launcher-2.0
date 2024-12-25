@@ -14,8 +14,8 @@ class Launcher(QMainWindow):
     def __init__(self):
         super().__init__()
         print("Initializing Launcher...")  # Debug message
-        self.setWindowTitle("Level Down Launcher 2.0")
-        self.setGeometry(100, 100, 1100, 750)
+        self.setWindowTitle("Level Down Launcher")
+        self.setGeometry(100, 100, 1100, 760)
 
         # Store the wallpaper path
         self.wallpaper_path = "assets/images/wallpaper3.png"
