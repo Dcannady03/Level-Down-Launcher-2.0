@@ -1,19 +1,21 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap, QFont
 import os
 import sys
+import shutil
 import requests
 import hashlib
-import shutil
-import atexit  # Import atexit for cleanup
 import subprocess
 import time
-from PyQt5.QtCore import QCoreApplication
-# Set the path to the 'platforms' directory
-qt_platform_plugins_path = os.path.join(os.path.dirname(__file__), "platforms")
-QCoreApplication.addLibraryPath(qt_platform_plugins_path)
+from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QCoreApplication
+from PyQt5.QtGui import QPixmap, QFont
+import atexit  # Import atexit for cleanup
 
+# Function to resolve resource paths dynamically
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for both dev and PyInstaller."""
+    if getattr(sys, "frozen", False):  # If running as a PyInstaller bundle
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
 
 # Register a cleanup function to avoid errors
 def cleanup_temp():
@@ -26,29 +28,18 @@ def cleanup_temp():
 
 atexit.register(cleanup_temp)  # Register the cleanup function
 
-def install_dependencies():
-    """Ensure required dependencies are installed."""
-    required_packages = ["PyQt5", "requests"]
-    for package in required_packages:
-        try:
-            __import__(package)
-        except ImportError:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-install_dependencies()
-
 def apply_dark_theme(app):
     """Load and apply the dark theme stylesheet."""
-    theme_path = os.path.join(os.getcwd(), "assets", "styles", "dark_theme.qss")
+    theme_path = resource_path(os.path.join("assets", "styles", "dark_theme.qss"))
     if os.path.exists(theme_path):
         try:
             with open(theme_path, "r") as file:
                 app.setStyleSheet(file.read())
-            print(f"Dark theme loaded from {theme_path}")
+            print(f"Dark theme loaded successfully from {theme_path}")
         except Exception as e:
             print(f"Error loading dark theme: {e}")
     else:
-        print(f"Dark theme not found at {theme_path}. Using default styles.")
+        print(f"Dark theme file not found at {theme_path}. Using default styles.")
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -58,11 +49,14 @@ class SplashScreen(QMainWindow):
 
         # Background Image
         self.background = QLabel(self)
-        background_path = os.path.join("assets", "images", "test6.png")
+        background_path = resource_path(os.path.join("assets", "images", "test6.png"))
         pixmap = QPixmap(background_path)
-        self.background.setPixmap(pixmap)
-        self.background.setScaledContents(True)
-        self.background.setGeometry(0, 0, 600, 400)
+        if not pixmap.isNull():
+            self.background.setPixmap(pixmap)
+            self.background.setScaledContents(True)
+            self.background.setGeometry(0, 0, 600, 400)
+        else:
+            print(f"Error loading background image from {background_path}")
 
         # Overlay Layout
         self.overlay = QVBoxLayout()
@@ -113,26 +107,16 @@ class SplashScreen(QMainWindow):
         """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            print("Restart required. Restarting application.")  # Debug message
             self.restart_application()
         else:
             self.status_label.setText("Launching application...")
-            print("Update completed. Launching main window.")  # Debug message
             time.sleep(2)  # Add a delay before switching to the launcher
             self.load_main_window()
 
     def restart_application(self):
         """Restart the current application."""
         try:
-            if getattr(sys, "frozen", False):  # Nuitka standalone mode
-                executable = sys.executable  # Points to the compiled executable
-            else:
-                executable = sys.executable  # Development mode (Python interpreter)
-
-            print(f"Restarting application: {executable}")
-            print(f"Arguments: {sys.argv}")
-
-            # Restart the executable
+            executable = sys.executable
             subprocess.Popen([executable] + sys.argv, close_fds=True)
             sys.exit(0)  # Exit the current process
         except Exception as e:
