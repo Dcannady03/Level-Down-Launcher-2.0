@@ -31,6 +31,7 @@ atexit.register(cleanup_temp)  # Register the cleanup function
 def apply_dark_theme(app):
     """Load and apply the dark theme stylesheet."""
     theme_path = resource_path(os.path.join("assets", "styles", "dark_theme.qss"))
+    print(f"Resolving theme path: {theme_path}")  # Debug path
     if os.path.exists(theme_path):
         try:
             with open(theme_path, "r") as file:
@@ -50,6 +51,7 @@ class SplashScreen(QMainWindow):
         # Background Image
         self.background = QLabel(self)
         background_path = resource_path(os.path.join("assets", "images", "test6.png"))
+        print(f"Resolving background image path: {background_path}")  # Debug path
         pixmap = QPixmap(background_path)
         if not pixmap.isNull():
             self.background.setPixmap(pixmap)
@@ -117,6 +119,7 @@ class SplashScreen(QMainWindow):
         """Restart the current application."""
         try:
             executable = sys.executable
+            print(f"Restarting application with executable: {executable}")  # Debug
             subprocess.Popen([executable] + sys.argv, close_fds=True)
             sys.exit(0)  # Exit the current process
         except Exception as e:

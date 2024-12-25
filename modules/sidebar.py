@@ -1,11 +1,12 @@
 from PyQt5.QtGui import QPixmap, QDesktopServices
 from PyQt5.QtCore import Qt, QUrl
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
 import os
 import json
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
-import subprocess  # For launching executables
-import sys
 import ctypes
+import subprocess
+import sys
+
 
 class Sidebar(QWidget):
     def __init__(self, parent=None):
@@ -17,25 +18,32 @@ class Sidebar(QWidget):
         # Add buttons with images and labels
         self.add_image_button_with_label(
             layout,
-            "assets/images/ashita.png",
-            "assets/images/ashitatxt.png",
+            self.resource_path("assets/images/ashita.png"),
+            self.resource_path("assets/images/ashitatxt.png"),
             self.launch_ashita,
         )
         self.add_image_button_with_label(
             layout,
-            "assets/images/windower.png",
-            "assets/images/windowertxt.png",
+            self.resource_path("assets/images/windower.png"),
+            self.resource_path("assets/images/windowertxt.png"),
             self.launch_windower,
         )
         self.add_image_button_with_label(
             layout,
-            "assets/images/wiki.png",
-            "assets/images/wikitxt.png",
+            self.resource_path("assets/images/wiki.png"),
+            self.resource_path("assets/images/wikitxt.png"),
             self.open_wiki,
         )
 
         self.setLayout(layout)
         self.setFixedWidth(150)
+
+    @staticmethod
+    def resource_path(relative_path):
+        """Get the absolute path to a resource, works for both dev and PyInstaller."""
+        if getattr(sys, "frozen", False):  # If running as a PyInstaller bundle
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.abspath(relative_path)
 
     def add_image_button_with_label(self, layout, image_path, label_image_path, callback):
         """Create an image button with a label and an additional image label."""
@@ -51,6 +59,8 @@ class Sidebar(QWidget):
         else:
             image_label.setText("Image Missing")
             image_label.setStyleSheet("color: red;")
+            print(f"Image not found: {image_path}")  # Debugging
+
         container_layout.addWidget(image_label, alignment=Qt.AlignCenter)
 
         # Label Image
@@ -62,6 +72,8 @@ class Sidebar(QWidget):
         else:
             label_image.setText("Label Missing")
             label_image.setStyleSheet("color: red;")
+            print(f"Label image not found: {label_image_path}")  # Debugging
+
         container_layout.addWidget(label_image, alignment=Qt.AlignCenter)
 
         # Clickable Button
@@ -85,19 +97,18 @@ class Sidebar(QWidget):
         """Show a popup message."""
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Warning)
-        msg_box.setWindowTitle("Directory Not Set")
+        msg_box.setWindowTitle("Error")
         msg_box.setText(message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
 
     def load_settings(self):
         """Load settings from settings.json file."""
-        if os.path.exists("settings.json"):
-            with open("settings.json", "r") as f:
+        settings_path = self.resource_path("settings.json")
+        if os.path.exists(settings_path):
+            with open(settings_path, "r") as f:
                 return json.load(f)
         return {}
-
-    import ctypes
 
     def launch_executable(self, directory, executable_name):
         """Launch the executable with elevated privileges if required."""
@@ -117,8 +128,8 @@ class Sidebar(QWidget):
             self.show_popup(f"The executable '{executable_name}' was not found in the directory:\n{directory}")
             print(f"Executable not found: {executable_path}")
 
-
     def launch_ashita(self):
+        """Launch Ashita with the settings directory."""
         settings = self.load_settings()
         ashita_dir = settings.get("ashita_dir")
         close_after_launch = settings.get("close_after_launch", False)
@@ -131,6 +142,7 @@ class Sidebar(QWidget):
                 self.parentWidget().close()  # Close the launcher
 
     def launch_windower(self):
+        """Launch Windower with the settings directory."""
         settings = self.load_settings()
         windower_dir = settings.get("windower_dir")
         close_after_launch = settings.get("close_after_launch", False)
