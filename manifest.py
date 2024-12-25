@@ -15,7 +15,7 @@ OUTPUT_FILE = os.path.join(BASE_DIR, "manifest.json")
 MANIFEST_VERSION = "2.1.2"
 
 # Files and folders to skip
-SKIP_FOLDERS = [".git", ".vs", "__pycache__", "build", "dist"]
+SKIP_FOLDERS = [".git", ".vs", "__pycache__", "build", "dist", "splash_screen.dist", "splash_screen.build"]
 SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes", ".gitignore", "settings.json", "splash_screen.spec"]
 
 

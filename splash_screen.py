@@ -10,7 +10,19 @@ import atexit  # Import atexit for cleanup
 import subprocess
 import time
 
-os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(os.getcwd(), "PyQt5", "Qt", "plugins", "platforms")
+if getattr(sys, "frozen", False):  # If running as a bundled executable
+    # Use sys._MEIPASS to locate bundled resources
+    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(sys._MEIPASS, "platforms")
+    base_library_path = os.path.join(sys._MEIPASS, "base_library.zip")
+else:  # If running in a development environment
+    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(
+        "C:/Users/dcann/AppData/Local/Programs/Python/Python311/Lib/site-packages/PyQt5/Qt5/plugins/platforms"
+    )
+    base_library_path = os.path.join(os.getcwd(), "base_library.zip")
+
+print(f"Using base_library.zip from: {base_library_path}")
+
+
 # Register a cleanup function to avoid errors
 def cleanup_temp():
     temp_dir = getattr(sys, '_MEIPASS', None)
@@ -110,13 +122,30 @@ class SplashScreen(QMainWindow):
         if restart_required:
             self.status_label.setText("Restarting application...")
             print("Restart required. Restarting application.")  # Debug message
-            os.execl(sys.executable, sys.executable, *sys.argv)
+            self.restart_application()
         else:
             self.status_label.setText("Launching application...")
             print("Update completed. Launching main window.")  # Debug message
             time.sleep(2)  # Add a delay before switching to the launcher
-
             self.load_main_window()
+
+    def restart_application(self):
+        """Restart the current application."""
+        try:
+            if getattr(sys, "frozen", False):  # Nuitka standalone mode
+                executable = sys.executable  # Points to the compiled executable
+            else:
+                executable = sys.executable  # Development mode (Python interpreter)
+
+            print(f"Restarting application: {executable}")
+            print(f"Arguments: {sys.argv}")
+
+            # Restart the executable
+            subprocess.Popen([executable] + sys.argv, close_fds=True)
+            sys.exit(0)  # Exit the current process
+        except Exception as e:
+            print(f"Failed to restart application: {e}")
+            self.status_label.setText("Error restarting application. Please restart manually.")
 
     def load_main_window(self):
         """Transition to the main launcher."""

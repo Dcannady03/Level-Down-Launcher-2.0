@@ -2,6 +2,11 @@
     "version": "2.1.2",
     "files": [
         {
+            "name": "base_library.zip",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/base_library.zip",
+            "checksum": "28bf55fec546af2521db48c9b18e937a"
+        },
+        {
             "name": "launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
             "checksum": "19d2bedfb13618c43502a9ec26cd9489"
@@ -12,9 +17,19 @@
             "checksum": "bcefae5388efa1ed2dbb3cf1c9df634b"
         },
         {
+            "name": "New Text Document.txt",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/New Text Document.txt",
+            "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        {
+            "name": "setup.py",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/setup.py",
+            "checksum": "67264191d44868b852a1b4092e519945"
+        },
+        {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "194ee2a3f05c93351d20f3fae0f0bb28"
+            "checksum": "627defe66bff435fa01c4770ecc8a515"
         },
         {
             "name": "assets/images/ashita.png",
@@ -135,6 +150,26 @@
             "name": "modules/server_tabs/__init__.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__init__.py",
             "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        {
+            "name": "platforms/qminimal.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qminimal.dll",
+            "checksum": "2f6d88f8ec3047deaf174002228219ab"
+        },
+        {
+            "name": "platforms/qoffscreen.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qoffscreen.dll",
+            "checksum": "6407499918557594916c6ab1ffef1e99"
+        },
+        {
+            "name": "platforms/qwebgl.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qwebgl.dll",
+            "checksum": "1edcb08c16d30516483a4cbb7d81e062"
+        },
+        {
+            "name": "platforms/qwindows.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qwindows.dll",
+            "checksum": "4931fcd0e86c4d4f83128dc74e01eaad"
         }
     ]
 }
