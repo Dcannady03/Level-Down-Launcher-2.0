@@ -21,7 +21,12 @@ def resource_path(relative_path):
 class Launcher(QMainWindow):
     def __init__(self):
         super().__init__()
-        print("Initializing Launcher...")  # Debug message
+        try:
+            print("Setting up Launcher...")
+            # Existing code
+            print("Launcher setup complete.")
+        except Exception as e:
+            print(f"Error initializing Launcher: {e}")
 
         # Set application icon
         icon_path = resource_path(os.path.join("assets", "images", "test6.ico"))

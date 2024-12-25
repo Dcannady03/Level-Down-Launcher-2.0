@@ -14,7 +14,7 @@
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "5709b37ffcbde90b23cbc396669ca49f"
+            "checksum": "c6287afd19109e7bf3f9fd8ce93ec772"
         },
         {
             "name": "assets/images/ashita.png",
@@ -79,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "82c6296f2cc0403c7337da8b86554e96"
+            "checksum": "cb576f09bc0f2db26560ec22af0a750d"
         },
         {
             "name": "modules/server_tabs.py",
