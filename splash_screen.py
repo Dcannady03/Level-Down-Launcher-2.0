@@ -1,22 +1,16 @@
+from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtGui import QPixmap, QFont
 import os
 import sys
-import shutil
 import requests
 import hashlib
+import shutil
+import atexit  # Import atexit for cleanup
 import subprocess
 import time
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QCoreApplication
-from PyQt5.QtGui import QPixmap, QFont
-import atexit  # Import atexit for cleanup
 
-# Function to resolve resource paths dynamically
-def resource_path(relative_path):
-    """Get the absolute path to a resource, works for both dev and PyInstaller."""
-    if getattr(sys, "frozen", False):  # If running as a PyInstaller bundle
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.abspath(relative_path)
-
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(os.getcwd(), "PyQt5", "Qt", "plugins", "platforms")
 # Register a cleanup function to avoid errors
 def cleanup_temp():
     temp_dir = getattr(sys, '_MEIPASS', None)
@@ -28,19 +22,29 @@ def cleanup_temp():
 
 atexit.register(cleanup_temp)  # Register the cleanup function
 
+def install_dependencies():
+    """Ensure required dependencies are installed."""
+    required_packages = ["PyQt5", "requests"]
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+install_dependencies()
+
 def apply_dark_theme(app):
     """Load and apply the dark theme stylesheet."""
-    theme_path = resource_path(os.path.join("assets", "styles", "dark_theme.qss"))
-    print(f"Resolving theme path: {theme_path}")  # Debug path
+    theme_path = os.path.join(os.getcwd(), "assets", "styles", "dark_theme.qss")
     if os.path.exists(theme_path):
         try:
             with open(theme_path, "r") as file:
                 app.setStyleSheet(file.read())
-            print(f"Dark theme loaded successfully from {theme_path}")
+            print(f"Dark theme loaded from {theme_path}")
         except Exception as e:
             print(f"Error loading dark theme: {e}")
     else:
-        print(f"Dark theme file not found at {theme_path}. Using default styles.")
+        print(f"Dark theme not found at {theme_path}. Using default styles.")
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -50,15 +54,11 @@ class SplashScreen(QMainWindow):
 
         # Background Image
         self.background = QLabel(self)
-        background_path = resource_path(os.path.join("assets", "images", "test6.png"))
-        print(f"Resolving background image path: {background_path}")  # Debug path
+        background_path = os.path.join("assets", "images", "test6.png")
         pixmap = QPixmap(background_path)
-        if not pixmap.isNull():
-            self.background.setPixmap(pixmap)
-            self.background.setScaledContents(True)
-            self.background.setGeometry(0, 0, 600, 400)
-        else:
-            print(f"Error loading background image from {background_path}")
+        self.background.setPixmap(pixmap)
+        self.background.setScaledContents(True)
+        self.background.setGeometry(0, 0, 600, 400)
 
         # Overlay Layout
         self.overlay = QVBoxLayout()
@@ -109,36 +109,21 @@ class SplashScreen(QMainWindow):
         """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            self.restart_application()
+            print("Restart required. Restarting application.")  # Debug message
+            os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.status_label.setText("Launching application...")
+            print("Update completed. Launching main window.")  # Debug message
             time.sleep(2)  # Add a delay before switching to the launcher
-            self.load_main_window()
 
-    def restart_application(self):
-        """Restart the current application."""
-        try:
-            executable = sys.executable
-            print(f"Restarting application with executable: {executable}")  # Debug
-            subprocess.Popen([executable] + sys.argv, close_fds=True)
-            sys.exit(0)  # Exit the current process
-        except Exception as e:
-            print(f"Failed to restart application: {e}")
-            self.status_label.setText("Error restarting application. Please restart manually.")
+            self.load_main_window()
 
     def load_main_window(self):
         """Transition to the main launcher."""
-        try:
-            print("Loading Launcher...")
-            from launcher import Launcher  # Import here to avoid circular imports
-            self.hide()  # Hide the splash screen
-            self.main_window = Launcher()  # Initialize the launcher
-            self.main_window.show()  # Show the launcher window
-            print("Launcher loaded successfully.")
-        except Exception as e:
-            print(f"Error loading Launcher: {e}")
-            self.status_label.setText(f"Error: {e}")
-
+        from launcher import Launcher  # Import here to avoid circular imports
+        self.hide()  # Hide the splash screen
+        self.main_window = Launcher()  # Initialize the launcher
+        self.main_window.show()  # Show the launcher window
 
 
 class UpdateWorker(QThread):
