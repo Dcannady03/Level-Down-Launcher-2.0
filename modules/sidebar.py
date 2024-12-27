@@ -1,17 +1,19 @@
 from PyQt5.QtGui import QPixmap, QDesktopServices
 from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox, QApplication, QFileDialog
 import os
 import json
-import ctypes
 import subprocess
 import sys
 
 
 class Sidebar(QWidget):
+    SETTINGS_FILE = "settings.json"
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setObjectName("Sidebar")
+        self.settings = self.load_settings()
 
         layout = QVBoxLayout()
 
@@ -59,7 +61,7 @@ class Sidebar(QWidget):
         else:
             image_label.setText("Image Missing")
             image_label.setStyleSheet("color: red;")
-            print(f"Image not found: {image_path}")  # Debugging
+            print(f"Image not found: {image_path}")
 
         container_layout.addWidget(image_label, alignment=Qt.AlignCenter)
 
@@ -72,7 +74,7 @@ class Sidebar(QWidget):
         else:
             label_image.setText("Label Missing")
             label_image.setStyleSheet("color: red;")
-            print(f"Label image not found: {label_image_path}")  # Debugging
+            print(f"Label image not found: {label_image_path}")
 
         container_layout.addWidget(label_image, alignment=Qt.AlignCenter)
 
@@ -103,56 +105,60 @@ class Sidebar(QWidget):
         msg_box.exec_()
 
     def load_settings(self):
-        """Load settings from settings.json file."""
-        settings_path = self.resource_path("settings.json")
-        if os.path.exists(settings_path):
-            with open(settings_path, "r") as f:
+        """Load settings from the JSON file."""
+        if os.path.exists(self.SETTINGS_FILE):
+            with open(self.SETTINGS_FILE, "r") as f:
                 return json.load(f)
         return {}
 
-    def launch_executable(self, directory, executable_name):
-        """Launch the executable with elevated privileges if required."""
-        executable_path = os.path.join(directory, executable_name)
-
-        if os.path.exists(executable_path):
+    def launch_executable(self, dir_key, exe_key, default_message):
+        """Launch a user-specified executable or prompt if it doesn't exist."""
+        exe_path = self.settings.get(exe_key)  # Full path to the executable
+        if exe_path and os.path.exists(exe_path):
             try:
-                # Elevate the process
-                response = ctypes.windll.shell32.ShellExecuteW(None, "runas", executable_path, None, None, 1)
-                if response <= 32:
-                    raise OSError(f"Failed to launch {executable_name} with elevation.")
-                print(f"Successfully launched {executable_name} with elevation.")
+                subprocess.Popen([exe_path], shell=True)
+                print(f"Successfully launched {exe_path}.")
+            
+                # Close the launcher if required
+                if self.settings.get("close_after_launch", False):
+                    print("Close after launch is enabled. Closing launcher.")
+                    QApplication.quit()
             except Exception as e:
-                self.show_popup(f"Failed to launch {executable_name}: {e}")
-                print(f"Error launching {executable_name}: {e}")
+                self.show_popup(f"Failed to launch {exe_path}: {e}")
         else:
-            self.show_popup(f"The executable '{executable_name}' was not found in the directory:\n{directory}")
-            print(f"Executable not found: {executable_path}")
+            # If the executable doesn't exist, prompt the user to select it
+            dir_path = self.settings.get(dir_key)  # Get the directory path
+            if dir_path and os.path.exists(dir_path):
+                options = QFileDialog.Options()
+                options |= QFileDialog.ReadOnly
+                selected_file, _ = QFileDialog.getOpenFileName(
+                    self, f"Select executable for {exe_key.replace('_', ' ').title()}",
+                    dir_path, "Executable Files (*.exe);;All Files (*)", options=options
+                )
+                if selected_file:
+                    self.settings[exe_key] = selected_file
+                    self.save_settings()
+                    self.launch_executable(dir_key, exe_key, default_message)
+                else:
+                    self.show_popup(f"No executable selected for {exe_key}.")
+            else:
+                self.show_popup(default_message)
 
     def launch_ashita(self):
-        """Launch Ashita with the settings directory."""
-        settings = self.load_settings()
-        ashita_dir = settings.get("ashita_dir")
-        close_after_launch = settings.get("close_after_launch", False)
-
-        if not ashita_dir:
-            self.show_popup("Please set the directory for Ashita in the Settings tab.")
-        else:
-            self.launch_executable(ashita_dir, "Ashita.exe")
-            if close_after_launch:
-                self.parentWidget().close()  # Close the launcher
+        """Launch the executable specified for Ashita."""
+        self.launch_executable(
+            "ashita_dir", 
+            "ashita_exe", 
+            "Ashita directory is not set in settings.json. Please configure it."
+        )
 
     def launch_windower(self):
-        """Launch Windower with the settings directory."""
-        settings = self.load_settings()
-        windower_dir = settings.get("windower_dir")
-        close_after_launch = settings.get("close_after_launch", False)
-
-        if not windower_dir:
-            self.show_popup("Please set the directory for Windower in the Settings tab.")
-        else:
-            self.launch_executable(windower_dir, "Windower.exe")
-            if close_after_launch:
-                self.parentWidget().close()  # Close the launcher
+        """Launch the executable specified for Windower."""
+        self.launch_executable(
+            "windower_dir", 
+            "windower_exe", 
+            "Windower directory is not set in settings.json. Please configure it."
+        )
 
     def open_wiki(self):
         """Open the Wiki URL."""

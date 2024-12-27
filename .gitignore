@@ -81,3 +81,4 @@ base_library.zip
 /build
 setup.py
 requirements.txt
+/.vs
