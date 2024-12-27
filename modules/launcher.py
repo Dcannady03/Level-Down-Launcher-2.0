@@ -4,9 +4,9 @@ from PyQt5.QtCore import Qt
 import os
 from modules.sidebar import Sidebar
 from modules.dashboard import Dashboard
-from modules.server_tabs.level_down_99 import LevelDown99Tab
-from modules.server_tabs.level_down_75 import LevelDown75Tab
-from modules.server_tabs.level_down_75_era import LevelDown75ERATab
+#from modules.server_tabs.level_down_99 import LevelDown99Tab
+#from modules.server_tabs.level_down_75 import LevelDown75Tab
+#from modules.server_tabs.level_down_75_era import LevelDown75ERATab
 from modules.settings import Settings
 from modules.xi_updater import XIUpdaterTab  # Assuming XI Updater tab exists
 import sys
@@ -85,10 +85,10 @@ class Launcher(QMainWindow):
             print("Dashboard tab added.")  # Debug message
 
             # Add Server Tabs
-            tabs.addTab(LevelDown99Tab(), "Level Down 99")
-            tabs.addTab(LevelDown75Tab(), "Level Down 75")
-            tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
-            print("Server tabs added.")  # Debug message
+            #tabs.addTab(LevelDown99Tab(), "Level Down 99")
+            #tabs.addTab(LevelDown75Tab(), "Level Down 75")
+            #tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
+            #print("Server tabs added.")  # Debug message
 
             # Add Settings Tab
             tabs.addTab(Settings(), "Settings")

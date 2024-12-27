@@ -4,12 +4,12 @@
         {
             "name": "launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
-            "checksum": "de9f2bd79befd3e24478000b937cadd5"
+            "checksum": "d89a144d9ad1907b1bbcdfc33f6bb220"
         },
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "284289c491d0c0bfd9b8490189ca24db"
+            "checksum": "8c1131cf9444b49292edacab9f640eec"
         },
         {
             "name": "splash_screen.py",
@@ -79,7 +79,7 @@
         {
             "name": "modules/launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "cb576f09bc0f2db26560ec22af0a750d"
+            "checksum": "63cec37073f24fd3ad58973ad05e6313"
         },
         {
             "name": "modules/server_tabs.py",

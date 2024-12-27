@@ -2,9 +2,9 @@ from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QWidget
 from PyQt5.QtGui import QPixmap, QPainter
 from modules.sidebar import Sidebar
 from modules.dashboard import Dashboard
-from modules.server_tabs.level_down_99 import LevelDown99Tab
-from modules.server_tabs.level_down_75 import LevelDown75Tab
-from modules.server_tabs.level_down_75_era import LevelDown75ERATab
+#from modules.server_tabs.level_down_99 import LevelDown99Tab
+#from modules.server_tabs.level_down_75 import LevelDown75Tab
+#from modules.server_tabs.level_down_75_era import LevelDown75ERATab
 from modules.settings import Settings
 from PyQt5.QtCore import Qt
 from modules.xi_updater import XIUpdaterTab  # Or XIUpdaterWindow if that's the class name
@@ -53,9 +53,9 @@ class Launcher(QMainWindow):
         tabs = QTabWidget()
 
         tabs.addTab(Dashboard(), "Dashboard")
-        tabs.addTab(LevelDown99Tab(), "Level Down 99")
-        tabs.addTab(LevelDown75Tab(), "Level Down 75")
-        tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
+        #tabs.addTab(LevelDown99Tab(), "Level Down 99")
+        #tabs.addTab(LevelDown75Tab(), "Level Down 75")
+        #tabs.addTab(LevelDown75ERATab(), "Level Down 75 ERA")
         tabs.addTab(XIUpdaterTab(), "XI Updater")  # Add the updater tab
         tabs.addTab(Settings(), "Settings")
 
