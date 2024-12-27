@@ -77,11 +77,6 @@
             "checksum": "8218d3f0a1110e52cc89aa511751b603"
         },
         {
-            "name": "modules/launcher.py",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/launcher.py",
-            "checksum": "63cec37073f24fd3ad58973ad05e6313"
-        },
-        {
             "name": "modules/server_tabs.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs.py",
             "checksum": "e823a08424274528f60d6daea807544f"
