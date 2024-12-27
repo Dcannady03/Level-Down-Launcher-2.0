@@ -1,60 +1,25 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtGui import QPixmap, QFont
 import os
 import sys
 import requests
 import hashlib
-import shutil
-import atexit  # Import atexit for cleanup
-import subprocess
-import time
 
-os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(os.getcwd(), "PyQt5", "Qt", "plugins", "platforms")
-# Register a cleanup function to avoid errors
-def cleanup_temp():
-    temp_dir = getattr(sys, '_MEIPASS', None)
-    if temp_dir and os.path.isdir(temp_dir):
-        try:
-            shutil.rmtree(temp_dir)
-        except Exception as e:
-            print(f"Failed to cleanup temp dir {temp_dir}: {e}")
-
-atexit.register(cleanup_temp)  # Register the cleanup function
-
-def install_dependencies():
-    """Ensure required dependencies are installed."""
-    required_packages = ["PyQt5", "requests"]
-    for package in required_packages:
-        try:
-            __import__(package)
-        except ImportError:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-install_dependencies()
-
-def apply_dark_theme(app):
-    """Load and apply the dark theme stylesheet."""
-    theme_path = os.path.join(os.getcwd(), "assets", "styles", "dark_theme.qss")
-    if os.path.exists(theme_path):
-        try:
-            with open(theme_path, "r") as file:
-                app.setStyleSheet(file.read())
-            print(f"Dark theme loaded from {theme_path}")
-        except Exception as e:
-            print(f"Error loading dark theme: {e}")
-    else:
-        print(f"Dark theme not found at {theme_path}. Using default styles.")
 
 class SplashScreen(QMainWindow):
     def __init__(self):
         super().__init__()
+        print("Initializing SplashScreen...")  # Debug message
+
         self.setWindowTitle("Level Down Launcher - Updating")
         self.setGeometry(100, 100, 600, 400)
 
         # Background Image
         self.background = QLabel(self)
         background_path = os.path.join("assets", "images", "test6.png")
+        if not os.path.exists(background_path):
+            print(f"Background image not found: {background_path}")  # Debug error
         pixmap = QPixmap(background_path)
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
@@ -64,10 +29,10 @@ class SplashScreen(QMainWindow):
         self.overlay = QVBoxLayout()
 
         # Status Label
-        self.status_label = QLabel("Initializing updates...")
+        self.status_label = QLabel("Initializing...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
-        self.status_label.setAlignment(Qt.AlignCenter)
+        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Progress Bar
         self.progress_bar = QProgressBar()
@@ -94,11 +59,7 @@ class SplashScreen(QMainWindow):
         overlay_widget.setLayout(self.overlay)
         overlay_widget.setGeometry(50, 250, 500, 100)
 
-        # Start the update process
-        self.worker = UpdateWorker()
-        self.worker.update_progress.connect(self.update_progress)
-        self.worker.finished.connect(self.on_update_complete)
-        self.worker.start()
+        print("SplashScreen initialized.")  # Debug message
 
     def update_progress(self, progress, message):
         """Update the progress bar and status label."""
@@ -109,21 +70,12 @@ class SplashScreen(QMainWindow):
         """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            print("Restart required. Restarting application.")  # Debug message
+            print("Restart required. Exiting splash screen.")  # Debug message
             os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.status_label.setText("Launching application...")
-            print("Update completed. Launching main window.")  # Debug message
-            time.sleep(2)  # Add a delay before switching to the launcher
-
-            self.load_main_window()
-
-    def load_main_window(self):
-        """Transition to the main launcher."""
-        from launcher import Launcher  # Import here to avoid circular imports
-        self.hide()  # Hide the splash screen
-        self.main_window = Launcher()  # Initialize the launcher
-        self.main_window.show()  # Show the launcher window
+            print("Update completed. Ready to launch.")  # Debug message
+            self.close()  # Close the splash screen
 
 
 class UpdateWorker(QThread):
@@ -131,53 +83,45 @@ class UpdateWorker(QThread):
     finished = pyqtSignal(bool)  # Signal whether a restart is required
 
     MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
-    SKIP_FOLDERS = [".git", ".vs", "__pycache__"]
-    SKIP_FILES = ["manifest.py", "manifest.json", ".gitattributes", ".gitignore", "settings.json"]
 
     def run(self):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Step 1: Fetch the manifest
+            # Fetch the manifest
             manifest = self.fetch_manifest()
             if not manifest:
-                self.update_progress.emit(0, "Failed to fetch manifest.")
+                print("No manifest available. Skipping update check.")
                 self.finished.emit(False)
                 return
 
-            # Step 2: Check for updates
+            # Check for updates
             files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
 
-            # Determine if a restart is required
             restart_required = any(file["name"] == "main.py" for file in files_to_update)
 
-            if total_files == 0:
-                print("No updates found. All files are up to date.")  # Debug message
-                self.update_progress.emit(100, "No updates found.")
-                self.finished.emit(False)  # No restart required
-                return
+            if total_files > 0:
+                print(f"Files to update: {total_files}")  # Debug message
 
-            print(f"Files to update: {total_files}")  # Debug message
+                # Apply updates with progress tracking
+                for i, file in enumerate(files_to_update, start=1):
+                    self.update_progress.emit(
+                        int((i / total_files) * 100), f"Updating {file['name']}..."
+                    )
+                    self.download_file(file)
 
-            # Step 3: Apply updates
-            for i, file in enumerate(files_to_update, start=1):
-                self.update_progress.emit(
-                    int((i / total_files) * 100), f"Updating {file['name']}..."
-                )
-                self.download_file(file)
-
-            # Step 4: Finalize
             self.update_progress.emit(100, "Updates complete!")
-            print("UpdateWorker finished successfully.")  # Debug message
+            print("UpdateWorker finished.")  # Debug message
+
+            # Emit finished signal
             self.finished.emit(restart_required)
         except Exception as e:
-            print(f"Critical error in UpdateWorker: {e}")  # Debug message
-            self.update_progress.emit(0, f"Critical error: {e}")
+            print(f"Error in UpdateWorker: {e}")
+            self.update_progress.emit(0, f"Error: {e}")
             self.finished.emit(False)
 
     def fetch_manifest(self):
-        """Fetch the manifest from the URL."""
         try:
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
@@ -188,35 +132,20 @@ class UpdateWorker(QThread):
             return None
 
     def calculate_checksum(self, file_path):
-        """Calculate the checksum of a local file using MD5."""
-        hash_md5 = hashlib.md5()
+        """Calculate the checksum of a local file."""
+        sha256 = hashlib.sha256()
         with open(file_path, "rb") as f:
-            while chunk := f.read(4096):
-                hash_md5.update(chunk)
-        return hash_md5.hexdigest()
+            while chunk := f.read(8192):
+                sha256.update(chunk)
+        return sha256.hexdigest()
 
     def check_for_updates(self, manifest):
         """Check for files that need updates."""
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-
-            # Skip specified folders and files
-            if any(skip in local_path for skip in self.SKIP_FOLDERS) or os.path.basename(local_path) in self.SKIP_FILES:
-                print(f"Skipping: {local_path}")  # Debug message
-                continue
-
-            if not os.path.exists(local_path):
-                print(f"File missing: {file['name']}")  # Debug message
+            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
                 updates.append(file)
-            else:
-                # Compare checksums
-                local_checksum = self.calculate_checksum(local_path)
-                if local_checksum != file["checksum"]:
-                    print(f"Checksum mismatch for: {file['name']}")  # Debug message
-                    updates.append(file)
-                else:
-                    print(f"File up to date: {file['name']}")  # Debug message
         return updates
 
     def download_file(self, file):
@@ -234,10 +163,9 @@ class UpdateWorker(QThread):
             print(f"Error downloading {file['name']}: {e}")
 
 
-
 if __name__ == "__main__":
+    print("Starting splash screen...")  # Debug message
     app = QApplication(sys.argv)
-    apply_dark_theme(app)  # Apply the dark theme before showing any UI
-    splash = SplashScreen()
-    splash.show()
-    sys.exit(app.exec_())
+    splash = SplashScreen()  # Create the splash screen
+    splash.show()  # Show the splash screen
+    sys.exit(app.exec())  # Run the application event loop
