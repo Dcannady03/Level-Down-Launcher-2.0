@@ -1,7 +1,10 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPlainTextEdit
-from PyQt5.QtCore import QTimer
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPlainTextEdit
+from PyQt6.QtCore import QTimer
 import requests
+import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class Dashboard(QWidget):
     def __init__(self):
@@ -20,15 +23,17 @@ class Dashboard(QWidget):
         self.rss_feed_display = QPlainTextEdit()
         self.rss_feed_display.setReadOnly(True)  # Make it read-only
         self.rss_feed_display.setStyleSheet(
-            "background-color: rgba(255, 255, 255, 50%); color: #000; border: none;"
+            "background-color: rgba(0, 0, 0, 70%); color: #fff; border: none; padding: 5px;"
         )
         layout.addWidget(self.rss_feed_display)
 
         # Set the layout
         self.setLayout(layout)
-        self.setStyleSheet(
-            "background-color: rgba(200, 200, 200, 50%);"  # Light gray transparent background
-        )
+        self.setStyleSheet("background-color: rgba(50, 50, 50, 80%);")  # Dark transparent background
+
+        # Initialize RSS data
+        self.last_fetched_content = ""
+        self.rss_url = "https://raw.githubusercontent.com/Dcannady03/discord-update-bot/main/update_notification.txt"
 
         # Load RSS feed initially
         self.load_rss_feed()
@@ -40,15 +45,24 @@ class Dashboard(QWidget):
 
     def load_rss_feed(self):
         """Fetch and display the RSS feed."""
-        rss_url = "https://raw.githubusercontent.com/Dcannady03/discord-update-bot/main/update_notification.txt"
-
         try:
-            response = requests.get(rss_url)
+            logging.info("Fetching RSS feed...")
+            response = requests.get(self.rss_url, timeout=10)
             if response.status_code == 200:
                 content = response.text.strip()
-                self.rss_feed_display.setPlainText(content)
+                if content != self.last_fetched_content:
+                    self.last_fetched_content = content
+                    self.rss_feed_display.setPlainText(content)
+                    logging.info("RSS feed updated successfully.")
+                else:
+                    logging.info("No new updates in RSS feed.")
             else:
-                self.rss_feed_display.setPlainText("Failed to fetch updates. Please try again later.")
-        except Exception as e:
-            self.rss_feed_display.setPlainText(f"Error fetching RSS feed: {e}")
+                self.handle_error(f"HTTP Error {response.status_code}: Failed to fetch updates.")
+        except requests.RequestException as e:
+            self.handle_error(f"Error fetching RSS feed: {e}")
 
+    def handle_error(self, error_message):
+        """Handle errors gracefully."""
+        logging.error(error_message)
+        if not self.last_fetched_content:
+            self.rss_feed_display.setPlainText("Failed to fetch updates. Please try again later.")

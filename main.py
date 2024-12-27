@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 from launcher import Launcher
 import sys
 import ctypes
@@ -14,13 +14,12 @@ def ensure_admin_privileges():
         )
         sys.exit()
 
-ensure_admin_privileges()
 def apply_dark_theme(app):
     """Load and apply the dark theme stylesheet."""
     theme_path = os.path.join("assets", "styles", "dark_theme.qss")
     if os.path.exists(theme_path):
         try:
-            with open(theme_path, "r") as file:
+            with open(theme_path, "r", encoding="utf-8") as file:
                 app.setStyleSheet(file.read())
             print(f"Dark theme successfully loaded from {theme_path}")
         except Exception as e:
@@ -30,15 +29,20 @@ def apply_dark_theme(app):
 
 def main():
     """Main function to start the launcher."""
+    ensure_admin_privileges()
+    
+    # Create the application instance
     app = QApplication(sys.argv)
+
+    # Apply dark theme
     apply_dark_theme(app)
+
     # Initialize the main launcher window
     launcher = Launcher()
     launcher.show()
 
     # Start the event loop
-    sys.exit(app.exec_())
-
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     print("Starting the application...")

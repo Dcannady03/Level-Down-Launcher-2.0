@@ -1,18 +1,16 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtGui import QPixmap, QFont
 import os
 import sys
 import requests
 import hashlib
 
-
-from PyQt5.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget, QApplication
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap, QFont
-import os
-import sys
-
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for dev and PyInstaller."""
+    if hasattr(sys, "_MEIPASS"):  # Running in PyInstaller bundle
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -24,7 +22,7 @@ class SplashScreen(QMainWindow):
 
         # Background Image
         self.background = QLabel(self)
-        background_path = os.path.join("assets", "images", "test6.png")
+        background_path = resource_path("assets/images/test6.png")
         if not os.path.exists(background_path):
             print(f"Background image not found: {background_path}")  # Debug error
         pixmap = QPixmap(background_path)
@@ -39,7 +37,7 @@ class SplashScreen(QMainWindow):
         self.status_label = QLabel("Initializing...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
-        self.status_label.setAlignment(Qt.AlignCenter)
+        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Progress Bar
         self.progress_bar = QProgressBar()
@@ -67,8 +65,6 @@ class SplashScreen(QMainWindow):
         overlay_widget.setGeometry(50, 250, 500, 100)
 
         print("SplashScreen initialized.")  # Debug message
-
-
 
     def update_progress(self, progress, message):
         """Update the progress bar and status label."""
@@ -132,12 +128,15 @@ class UpdateWorker(QThread):
 
     def fetch_manifest(self):
         try:
-            response = requests.get(self.MANIFEST_URL)
+            response = requests.get(self.MANIFEST_URL, timeout=10)
             response.raise_for_status()
-            print("Manifest fetched successfully.")
-            return response.json()
+            manifest = response.json()
+            if not isinstance(manifest, dict) or "files" not in manifest:
+                raise ValueError("Invalid manifest format.")
+            print("Manifest fetched and validated successfully.")
+            return manifest
         except Exception as e:
-            print(f"Error fetching manifest: {e}")
+            print(f"Error fetching or validating manifest: {e}")
             return None
 
     def calculate_checksum(self, file_path):
@@ -152,14 +151,16 @@ class UpdateWorker(QThread):
         """Check for files that need updates."""
         updates = []
         for file in manifest.get("files", []):
-            local_path = os.path.join(os.getcwd(), file["name"])
+            # Define local_path to refer to the current directory
+            local_path = os.path.join(os.path.dirname(__file__), file["name"])
             if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
                 updates.append(file)
         return updates
 
     def download_file(self, file):
         """Download a file from the manifest."""
-        local_path = os.path.join(os.getcwd(), file["name"])
+        # Ensure local_path is properly defined
+        local_path = os.path.join(os.path.dirname(__file__), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
         try:
             response = requests.get(file["url"], stream=True)
@@ -171,6 +172,11 @@ class UpdateWorker(QThread):
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
 
+    def resource_path(relative_path):
+        """Get the absolute path to a resource, works for dev and PyInstaller."""
+        if hasattr(sys, "_MEIPASS"):  # Running in PyInstaller bundle
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.abspath(relative_path)
 
 if __name__ == "__main__":
     print("Starting splash screen...")  # Debug message

@@ -1,6 +1,6 @@
-from PyQt5.QtGui import QPixmap, QDesktopServices
-from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox, QApplication, QFileDialog
+from PyQt6.QtGui import QPixmap, QDesktopServices
+from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QMessageBox, QFileDialog, QApplication
 import os
 import json
 import subprocess
@@ -56,27 +56,27 @@ class Sidebar(QWidget):
         image_label = QLabel()
         pixmap = QPixmap(image_path)
         if not pixmap.isNull():
-            scaled_pixmap = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled_pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             image_label.setPixmap(scaled_pixmap)
         else:
             image_label.setText("Image Missing")
             image_label.setStyleSheet("color: red;")
             print(f"Image not found: {image_path}")
 
-        container_layout.addWidget(image_label, alignment=Qt.AlignCenter)
+        container_layout.addWidget(image_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Label Image
         label_image = QLabel()
         label_pixmap = QPixmap(label_image_path)
         if not label_pixmap.isNull():
-            scaled_label_pixmap = label_pixmap.scaled(100, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled_label_pixmap = label_pixmap.scaled(100, 40, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             label_image.setPixmap(scaled_label_pixmap)
         else:
             label_image.setText("Label Missing")
             label_image.setStyleSheet("color: red;")
             print(f"Label image not found: {label_image_path}")
 
-        container_layout.addWidget(label_image, alignment=Qt.AlignCenter)
+        container_layout.addWidget(label_image, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Clickable Button
         btn = QPushButton()
@@ -98,11 +98,11 @@ class Sidebar(QWidget):
     def show_popup(self, message):
         """Show a popup message."""
         msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setIcon(QMessageBox.Icon.Warning)
         msg_box.setWindowTitle("Error")
         msg_box.setText(message)
-        msg_box.setStandardButtons(QMessageBox.Ok)
-        msg_box.exec_()
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg_box.exec()
 
     def load_settings(self):
         """Load settings from the JSON file."""
@@ -112,7 +112,6 @@ class Sidebar(QWidget):
         return {}
 
     def launch_executable(self, dir_key, exe_key, default_message):
-    
         """Launch a user-specified executable or show a message if it's missing."""
         exe_path = self.settings.get(exe_key)  # Full path to the executable
         dir_path = self.settings.get(dir_key)  # Directory containing the executable
@@ -136,21 +135,19 @@ class Sidebar(QWidget):
         else:
             self.show_popup(default_message)
 
-
-
     def launch_ashita(self):
         """Launch the executable specified for Ashita."""
         self.launch_executable(
-            "ashita_dir", 
-            "ashita_exe", 
+            "ashita_dir",
+            "ashita_exe",
             "Ashita directory is not set in settings.json. Please configure it."
         )
 
     def launch_windower(self):
         """Launch the executable specified for Windower."""
         self.launch_executable(
-            "windower_dir", 
-            "windower_exe", 
+            "windower_dir",
+            "windower_exe",
             "Windower directory is not set in settings.json. Please configure it."
         )
 

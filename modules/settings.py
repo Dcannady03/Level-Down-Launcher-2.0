@@ -1,8 +1,12 @@
 import os
 import json
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, QMessageBox, QCheckBox
+import logging
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, QMessageBox, QCheckBox
 
 SETTINGS_FILE = "settings.json"
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class Settings(QWidget):
@@ -56,8 +60,12 @@ class Settings(QWidget):
     def load_settings(self):
         """Load settings from the JSON file."""
         if os.path.exists(SETTINGS_FILE):
-            with open(SETTINGS_FILE, "r") as f:
-                return json.load(f)
+            try:
+                with open(SETTINGS_FILE, "r") as f:
+                    return json.load(f)
+            except json.JSONDecodeError as e:
+                logging.error(f"Failed to load settings: {e}")
+                return {}
         return {}
 
     def save_settings(self):
@@ -65,9 +73,10 @@ class Settings(QWidget):
         try:
             with open(SETTINGS_FILE, "w") as f:
                 json.dump(self.settings, f, indent=4)
-            print("Settings saved successfully!")
+            logging.info("Settings saved successfully!")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to save settings: {e}")
+            logging.error(f"Error saving settings: {e}")
 
     def save_close_after_launch_setting(self):
         """Save the 'Close After Launch' setting to the JSON file."""
@@ -88,21 +97,28 @@ class Settings(QWidget):
             self, "Select Executable", "", "Executable Files (*.exe);;All Files (*)", options=options
         )
         if selected_file:
-            # Update the executable path
-            self.settings[exe_key] = selected_file
-            label.setText(f"{exe_key.replace('_', ' ').title()}: {selected_file}")
+            try:
+                # Update the executable path
+                self.settings[exe_key] = selected_file
+                label.setText(f"{exe_key.replace('_', ' ').title()}: {selected_file}")
 
-            # Update the corresponding directory key
-            dir_key = exe_key.replace("_exe", "_dir")
-            self.settings[dir_key] = os.path.dirname(selected_file)
+                # Update the corresponding directory key
+                dir_key = exe_key.replace("_exe", "_dir")
+                self.settings[dir_key] = os.path.dirname(selected_file)
 
-            self.save_settings()
-
+                self.save_settings()
+            except Exception as e:
+                logging.error(f"Error updating executable path: {e}")
+                QMessageBox.warning(self, "Error", f"Failed to update executable path: {e}")
 
     def browse_directory(self, key, label):
         """Open a dialog to browse for a directory."""
         selected_dir = QFileDialog.getExistingDirectory(self, "Select Directory")
         if selected_dir:
-            self.settings[key] = selected_dir
-            label.setText(f"{key.replace('_', ' ').title()}: {selected_dir}")
-            self.save_settings()
+            try:
+                self.settings[key] = selected_dir
+                label.setText(f"{key.replace('_', ' ').title()}: {selected_dir}")
+                self.save_settings()
+            except Exception as e:
+                logging.error(f"Error updating directory path: {e}")
+                QMessageBox.warning(self, "Error", f"Failed to update directory path: {e}")
