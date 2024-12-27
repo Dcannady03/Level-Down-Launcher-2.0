@@ -1,3 +1,5 @@
 {
-    "close_after_launch": false
+    "close_after_launch": false,
+    "ashita_exe": "C:/FFXI new/SquareEnix/Ashita/Ashita.exe",
+    "ashita_dir": "C:/FFXI new/SquareEnix/Ashita"
 }

@@ -80,17 +80,24 @@ class Settings(QWidget):
             self.settings[key] = default_value
             self.save_settings()
 
-    def browse_executable(self, key, label):
-        """Open a dialog to browse for an executable file."""
+    def browse_executable(self, exe_key, label):
+        """Open a dialog to browse for an executable file and update its directory."""
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
         selected_file, _ = QFileDialog.getOpenFileName(
             self, "Select Executable", "", "Executable Files (*.exe);;All Files (*)", options=options
         )
         if selected_file:
-            self.settings[key] = selected_file
-            label.setText(f"{key.replace('_', ' ').title()}: {selected_file}")
+            # Update the executable path
+            self.settings[exe_key] = selected_file
+            label.setText(f"{exe_key.replace('_', ' ').title()}: {selected_file}")
+
+            # Update the corresponding directory key
+            dir_key = exe_key.replace("_exe", "_dir")
+            self.settings[dir_key] = os.path.dirname(selected_file)
+
             self.save_settings()
+
 
     def browse_directory(self, key, label):
         """Open a dialog to browse for a directory."""

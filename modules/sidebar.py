@@ -112,37 +112,31 @@ class Sidebar(QWidget):
         return {}
 
     def launch_executable(self, dir_key, exe_key, default_message):
-        """Launch a user-specified executable or prompt if it doesn't exist."""
+    
+        """Launch a user-specified executable or show a message if it's missing."""
         exe_path = self.settings.get(exe_key)  # Full path to the executable
+        dir_path = self.settings.get(dir_key)  # Directory containing the executable
+
         if exe_path and os.path.exists(exe_path):
             try:
-                subprocess.Popen([exe_path], shell=True)
-                print(f"Successfully launched {exe_path}.")
-            
+                # Ensure the working directory is set to the executable's directory
+                working_dir = dir_path if dir_path and os.path.exists(dir_path) else os.path.dirname(exe_path)
+
+                # Launch the executable
+                subprocess.Popen([exe_path], cwd=working_dir, shell=True)
+                print(f"Successfully launched {exe_path} with working directory {working_dir}.")
+
                 # Close the launcher if required
                 if self.settings.get("close_after_launch", False):
                     print("Close after launch is enabled. Closing launcher.")
                     QApplication.quit()
             except Exception as e:
                 self.show_popup(f"Failed to launch {exe_path}: {e}")
+                print(f"Error launching executable: {e}")  # Debug log
         else:
-            # If the executable doesn't exist, prompt the user to select it
-            dir_path = self.settings.get(dir_key)  # Get the directory path
-            if dir_path and os.path.exists(dir_path):
-                options = QFileDialog.Options()
-                options |= QFileDialog.ReadOnly
-                selected_file, _ = QFileDialog.getOpenFileName(
-                    self, f"Select executable for {exe_key.replace('_', ' ').title()}",
-                    dir_path, "Executable Files (*.exe);;All Files (*)", options=options
-                )
-                if selected_file:
-                    self.settings[exe_key] = selected_file
-                    self.save_settings()
-                    self.launch_executable(dir_key, exe_key, default_message)
-                else:
-                    self.show_popup(f"No executable selected for {exe_key}.")
-            else:
-                self.show_popup(default_message)
+            self.show_popup(default_message)
+
+
 
     def launch_ashita(self):
         """Launch the executable specified for Ashita."""
