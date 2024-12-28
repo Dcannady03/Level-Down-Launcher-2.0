@@ -82,3 +82,4 @@ base_library.zip
 setup.py
 requirements.txt
 /.vs
+main.log
