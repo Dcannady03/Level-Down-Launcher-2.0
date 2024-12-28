@@ -82,21 +82,32 @@ class SplashScreen(QMainWindow):
         else:
             self.status_label.setText("Launching application...")
             print("Update completed. Attempting to launch main.py...")  # Debug message
-            
+
             # Attempt to launch main.py
             try:
                 main_path = os.path.join(os.getcwd(), "main.py")
-                print(f"Launching main.py from {main_path}")
-                os.system(f'"{sys.executable}" "{main_path}"')
-                print("main.py launched successfully.")
+                if not os.path.exists(main_path):
+                    print(f"main.py not found at {main_path}")
+                    return
+
+                # Print debug information
+                print(f"Using Python executable: {sys.executable}")
+                print(f"Launching main.py from: {main_path}")
+
+                # Use subprocess to execute main.py
+                import subprocess
+                result = subprocess.run([sys.executable, main_path], capture_output=True, text=True)
+
+                # Log stdout and stderr
+                print("stdout:", result.stdout)
+                print("stderr:", result.stderr)
             except Exception as e:
                 print(f"Failed to launch main.py: {e}")
-            
-            # Prevent automatic splash screen closure in case of a crash
-            self.status_label.setText("main.py execution completed.")
-            self.progress_bar.setValue(100)
-            # Optional: Keep the splash screen open for debugging
+
+            # Keep splash screen open for debugging
+            self.status_label.setText("main.py execution attempt complete. Check logs.")
             print("Splash screen will remain open for debugging.")
+
 
             
 
