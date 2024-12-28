@@ -74,14 +74,27 @@ class SplashScreen(QMainWindow):
         self.progress_bar.setValue(progress)
 
     def on_update_complete(self, restart_required):
+        """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            print("Restart required. Exiting splash screen.")  # Debug message
+            print("Restart required. Exiting splash screen.")
             os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.status_label.setText("Launching application...")
-            print("Update completed. Ready to launch.")  # Debug message
-            self.close()
+            print("Update completed. Ready to launch.")
+        
+            # Run main application without closing the splash screen
+            main_script_path = os.path.join(os.getcwd(), "main.py")
+            if os.path.exists(main_script_path):
+                print(f"Launching main.py from {main_script_path}")
+                os.system(f'"{sys.executable}" "{main_script_path}"')
+            else:
+                print(f"main.py not found at {main_script_path}. Exiting.")
+        
+            # Hide splash screen instead of closing it
+            self.hide()
+
+            
 
 
 class UpdateWorker(QThread):
