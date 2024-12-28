@@ -5,7 +5,7 @@ import os
 import sys
 import requests
 import hashlib
-
+import subprocess
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -84,14 +84,17 @@ class SplashScreen(QMainWindow):
             print("Update completed. Ready to launch.")
         
             # Run main application without closing the splash screen
+            
             main_script_path = os.path.join(os.getcwd(), "main.py")
             if os.path.exists(main_script_path):
                 print(f"Launching main.py from {main_script_path}")
-                os.system(f'"{sys.executable}" "{main_script_path}"')
+                try:
+                    # Use subprocess to launch main.py
+                    subprocess.run([sys.executable, main_script_path], check=True)
+                except Exception as e:
+                    print(f"Failed to launch main.py: {e}")
             else:
                 print(f"main.py not found at {main_script_path}. Exiting.")
-        
-            # Hide splash screen instead of closing it
             self.hide()
 
             
