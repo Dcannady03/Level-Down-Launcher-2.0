@@ -1,5 +1,5 @@
 {
-    "version": "2.1.4",
+    "version": "2.1.5",
     "files": [
         {
             "name": "launcher.py",
@@ -24,7 +24,7 @@
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "9534a09e9444bbfe951d1b7f0b13ab4a"
+            "checksum": "e4330483f1c109ed7d9b5909922e05d5"
         },
         {
             "name": "assets/images/ashita.png",

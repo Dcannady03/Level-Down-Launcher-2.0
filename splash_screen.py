@@ -77,25 +77,26 @@ class SplashScreen(QMainWindow):
         """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
-            print("Restart required. Exiting splash screen.")
+            print("Restart required. Exiting splash screen.")  # Debug message
             os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.status_label.setText("Launching application...")
-            print("Update completed. Ready to launch.")
-        
-            # Run main application without closing the splash screen
+            print("Update completed. Attempting to launch main.py...")  # Debug message
             
-            main_script_path = os.path.join(os.getcwd(), "main.py")
-            if os.path.exists(main_script_path):
-                print(f"Launching main.py from {main_script_path}")
-                try:
-                    # Use subprocess to launch main.py
-                    subprocess.run([sys.executable, main_script_path], check=True)
-                except Exception as e:
-                    print(f"Failed to launch main.py: {e}")
-            else:
-                print(f"main.py not found at {main_script_path}. Exiting.")
-            self.hide()
+            # Attempt to launch main.py
+            try:
+                main_path = os.path.join(os.getcwd(), "main.py")
+                print(f"Launching main.py from {main_path}")
+                os.system(f'"{sys.executable}" "{main_path}"')
+                print("main.py launched successfully.")
+            except Exception as e:
+                print(f"Failed to launch main.py: {e}")
+            
+            # Prevent automatic splash screen closure in case of a crash
+            self.status_label.setText("main.py execution completed.")
+            self.progress_bar.setValue(100)
+            # Optional: Keep the splash screen open for debugging
+            print("Splash screen will remain open for debugging.")
 
             
 
