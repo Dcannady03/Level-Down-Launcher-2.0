@@ -12,6 +12,11 @@
             "checksum": "22e73171aa40e6c9149a2137a7351cfd"
         },
         {
+            "name": "qt.conf",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/qt.conf",
+            "checksum": "f974c0e7bdca17a5d5fe8a6f59beadb3"
+        },
+        {
             "name": "setup.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/setup.py",
             "checksum": "6832c452842df61cd55848255069a399"
@@ -19,7 +24,7 @@
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "16d87ab8f7f27f03cddb754dd0103bb7"
+            "checksum": "59ed81022a9ea4cf2d38db712218b829"
         },
         {
             "name": "assets/images/ashita.png",
@@ -130,6 +135,21 @@
             "name": "modules/server_tabs/__init__.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__init__.py",
             "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        {
+            "name": "platforms/qminimal.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qminimal.dll",
+            "checksum": "f534ea5b2e138cf01fc63095bfed91cd"
+        },
+        {
+            "name": "platforms/qoffscreen.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qoffscreen.dll",
+            "checksum": "712be32d69ccfcc5e8e07eb0b0252838"
+        },
+        {
+            "name": "platforms/qwindows.dll",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qwindows.dll",
+            "checksum": "9e9ede62dac5ed360ad811c409b96ec7"
         }
     ]
 }
