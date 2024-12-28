@@ -1,7 +1,7 @@
 import os
 import hashlib
 import json
-
+ 
 # Base directory to scan
 BASE_DIR = r"I:\git\Level-Down-Launcher-2.0"
 

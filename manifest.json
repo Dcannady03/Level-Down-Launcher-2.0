@@ -7,9 +7,14 @@
             "checksum": "eb2f07cc1af0638512b5d3dafdcbd1e1"
         },
         {
+            "name": "main.log",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.log",
+            "checksum": "a5b9fd7f9fb085390610be828fed2881"
+        },
+        {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "f51e8877d4bb6e9330834886615ba686"
+            "checksum": "64a92dd075da2f6d0f7d5c77fb6e5f12"
         },
         {
             "name": "splash_screen.py",
@@ -99,7 +104,7 @@
         {
             "name": "modules/xi_updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/xi_updater.py",
-            "checksum": "1d86dc3a8f15324a25b6687a7520b8b0"
+            "checksum": "96c856abef2e78e8ffd26e07dff6fb3e"
         },
         {
             "name": "modules/__init__.py",

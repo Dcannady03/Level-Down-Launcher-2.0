@@ -95,7 +95,7 @@ class FileCheckThread(QThread):
         self.finished.emit(True)
 
 
-class XIUpdaterTab(QWidget):  # Changed to QWidget for tab usage
+class XIUpdaterTab(QWidget):
     def __init__(self):
         super().__init__()
         self.setObjectName("XIUpdaterTab")
@@ -114,14 +114,14 @@ class XIUpdaterTab(QWidget):  # Changed to QWidget for tab usage
         layout.addWidget(self.file_check_progress_label)
 
         self.file_check_progress_bar = QProgressBar()
-        self.file_check_progress_bar.setAlignment(Qt.AlignCenter)
+        self.file_check_progress_bar.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.file_check_progress_bar)
 
         self.download_progress_label = QLabel("Downloading files...")
         layout.addWidget(self.download_progress_label)
 
         self.download_progress_bar = QProgressBar()
-        self.download_progress_bar.setAlignment(Qt.AlignCenter)
+        self.download_progress_bar.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.download_progress_bar)
 
         self.download_status_label = QLabel("Status: None")
@@ -175,5 +175,3 @@ class XIUpdaterTab(QWidget):  # Changed to QWidget for tab usage
             QMessageBox.information(self, "Update Check", "All required updates have been applied!")
         else:
             QMessageBox.warning(self, "Update Check", "Failed to fetch updates or complete the process.")
-
-
