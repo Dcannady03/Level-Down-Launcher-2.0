@@ -4,9 +4,9 @@ import sys
 import ctypes
 import os
 
-#log_file = "main.log"
-#sys.stdout = open(log_file, "w")
-#sys.stderr = open(log_file, "w")
+log_file = "main.log"
+sys.stdout = open(log_file, "w")
+sys.stderr = open(log_file, "w")
 
 def ensure_admin_privileges():
     """Ensure the application runs with admin privileges."""

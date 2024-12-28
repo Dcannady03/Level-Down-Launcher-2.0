@@ -9,7 +9,12 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "64a92dd075da2f6d0f7d5c77fb6e5f12"
+            "checksum": "22e73171aa40e6c9149a2137a7351cfd"
+        },
+        {
+            "name": "setup.py",
+            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/setup.py",
+            "checksum": "6832c452842df61cd55848255069a399"
         },
         {
             "name": "splash_screen.py",
