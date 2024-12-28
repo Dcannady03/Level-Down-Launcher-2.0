@@ -59,15 +59,21 @@ class SplashScreen(QMainWindow):
         overlay_widget.setLayout(self.overlay)
         overlay_widget.setGeometry(50, 250, 500, 100)
 
+        # Initialize UpdateWorker and connect signals
+        self.worker = UpdateWorker()
+        self.worker.update_progress.connect(self.update_progress)
+        self.worker.finished.connect(self.on_update_complete)
+        self.worker.start()
+        print("UpdateWorker started.")  # Debug message
+
         print("SplashScreen initialized.")  # Debug message
 
     def update_progress(self, progress, message):
-        """Update the progress bar and status label."""
+        print(f"Progress updated: {progress}, Message: {message}")  # Debugging progress
         self.status_label.setText(message)
         self.progress_bar.setValue(progress)
 
     def on_update_complete(self, restart_required):
-        """Handle the completion of the update process."""
         if restart_required:
             self.status_label.setText("Restarting application...")
             print("Restart required. Exiting splash screen.")  # Debug message
@@ -75,7 +81,7 @@ class SplashScreen(QMainWindow):
         else:
             self.status_label.setText("Launching application...")
             print("Update completed. Ready to launch.")  # Debug message
-            self.close()  # Close the splash screen
+            self.close()
 
 
 class UpdateWorker(QThread):
@@ -88,34 +94,38 @@ class UpdateWorker(QThread):
         print("UpdateWorker started...")  # Debug message
 
         try:
-            # Fetch the manifest
+            print("Fetching manifest...")
             manifest = self.fetch_manifest()
             if not manifest:
                 print("No manifest available. Skipping update check.")
+                self.update_progress.emit(0, "Manifest fetch failed.")
                 self.finished.emit(False)
                 return
 
-            # Check for updates
+            print("Manifest fetched successfully.")
+            self.update_progress.emit(10, "Manifest fetched successfully.")
+
+            print("Checking for updates...")
             files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
 
-            restart_required = any(file["name"] == "main.py" for file in files_to_update)
+            if total_files == 0:
+                print("No updates required.")
+                self.update_progress.emit(100, "No updates found.")
+                self.finished.emit(False)
+                return
 
-            if total_files > 0:
-                print(f"Files to update: {total_files}")  # Debug message
+            print(f"Files to update: {total_files}")
 
-                # Apply updates with progress tracking
-                for i, file in enumerate(files_to_update, start=1):
-                    self.update_progress.emit(
-                        int((i / total_files) * 100), f"Updating {file['name']}..."
-                    )
-                    self.download_file(file)
+            for i, file in enumerate(files_to_update, start=1):
+                print(f"Updating {file['name']}...")
+                self.update_progress.emit(
+                    int((i / total_files) * 100), f"Updating {file['name']}..."
+                )
+                self.download_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
-            print("UpdateWorker finished.")  # Debug message
-
-            # Emit finished signal
-            self.finished.emit(restart_required)
+            self.finished.emit(any(file["name"] == "main.py" for file in files_to_update))
         except Exception as e:
             print(f"Error in UpdateWorker: {e}")
             self.update_progress.emit(0, f"Error: {e}")
@@ -125,31 +135,20 @@ class UpdateWorker(QThread):
         try:
             response = requests.get(self.MANIFEST_URL)
             response.raise_for_status()
-            print("Manifest fetched successfully.")
             return response.json()
         except Exception as e:
             print(f"Error fetching manifest: {e}")
             return None
 
-    def calculate_checksum(self, file_path):
-        """Calculate the checksum of a local file."""
-        sha256 = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            while chunk := f.read(8192):
-                sha256.update(chunk)
-        return sha256.hexdigest()
-
     def check_for_updates(self, manifest):
-        """Check for files that need updates."""
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+            if not os.path.exists(local_path):
                 updates.append(file)
         return updates
 
     def download_file(self, file):
-        """Download a file from the manifest."""
         local_path = os.path.join(os.getcwd(), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
         try:
@@ -164,8 +163,7 @@ class UpdateWorker(QThread):
 
 
 if __name__ == "__main__":
-    print("Starting splash screen...")  # Debug message
     app = QApplication(sys.argv)
-    splash = SplashScreen()  # Create the splash screen
-    splash.show()  # Show the splash screen
-    sys.exit(app.exec())  # Run the application event loop
+    splash = SplashScreen()
+    splash.show()
+    sys.exit(app.exec())
