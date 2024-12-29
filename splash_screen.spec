@@ -1,17 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
 
+# Collecting PyQt6 data and required files
 datas = collect_data_files('PyQt6', include_py_files=False) + [
     ('assets/images/test6.png', 'assets/images/'),
-    ('C:/Users/dcann/AppData/Local/Programs/Python/Python311/Lib/site-packages/PyQt6/Qt6/plugins/platforms', 'platforms'),
     ('qt.conf', '.')  # Adding qt.conf to root
 ]
+
+# Collect all PyQt6-related dynamic libraries
+binaries = collect_dynamic_libs('PyQt6')  # Automatically find and include DLLs
 
 a = Analysis(
     ['splash_screen.py'],
     pathex=[],
-    binaries=[],
+    binaries=binaries,  # Add binaries here
     datas=datas,
     hiddenimports=[],
     hookspath=[],

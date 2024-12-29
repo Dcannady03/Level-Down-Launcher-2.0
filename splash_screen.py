@@ -7,6 +7,11 @@ import requests
 import hashlib
 import subprocess
 
+if getattr(sys, 'frozen', False):
+    os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
+    os.chdir(sys._MEIPASS)  # Adjust to ensure assets are loaded correctly
+
+
 class SplashScreen(QMainWindow):
     def __init__(self):
         super().__init__()
