@@ -4,15 +4,29 @@ from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
 
 # Collecting PyQt6 data and required files
 datas = collect_data_files('PyQt6', include_py_files=False) + [
-    ('assets/images/test6.png', 'assets/images/'),
+    ('assets/images/test6.png', 'assets/images/'),  # Splash screen image
     ('qt.conf', '.')  # Adding qt.conf to root
 ]
 
-# Collect all PyQt6-related dynamic libraries
-binaries = collect_dynamic_libs('PyQt6')  # Automatically find and include DLLs
+# Automatically collect PyQt6-related dynamic libraries
+binaries = collect_dynamic_libs('PyQt6') + [
+    ('C:/Qt2/6.8.1/mingw_64/bin/Qt6Core.dll', '.'),
+    ('C:/Qt2/6.8.1/mingw_64/bin/Qt6Gui.dll', '.'),
+    ('C:/Qt2/6.8.1/mingw_64/bin/Qt6Widgets.dll', '.'),
+]
+
+hiddenimports = [
+    'simplejson',
+    'OpenSSL',
+    'cryptography.x509.UnsupportedExtension',
+    'brotli',
+    'brotlicffi',
+    'socks',
+]
+
 
 a = Analysis(
-    ['splash_screen.py'],
+    ['splash_screen.py'],  # Entry-point script
     pathex=[],
     binaries=binaries,  # Add binaries here
     datas=datas,
@@ -40,7 +54,7 @@ exe = EXE(
     upx=True,
     runtime_tmpdir=None,
     console=False,
-    icon='assets/images/test6.png',
+    icon='assets/images/test6.ico',  # Use the .ico version for the executable icon
     codesign_identity=None,
     entitlements_file=None,
     manifest="""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

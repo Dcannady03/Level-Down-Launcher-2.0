@@ -150,12 +150,12 @@ class UpdateWorker(QThread):
 
             print(f"Files to update: {total_files}")
 
+            # Replace and download files
             for i, file in enumerate(files_to_update, start=1):
-                print(f"Updating {file['name']}...")
                 self.update_progress.emit(
                     int((i / total_files) * 100), f"Updating {file['name']}..."
                 )
-                self.download_file(file)
+                self.download_and_replace_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
             self.finished.emit(any(file["name"] == "main.py" for file in files_to_update))
@@ -179,20 +179,36 @@ class UpdateWorker(QThread):
             local_path = os.path.join(os.getcwd(), file["name"])
             if not os.path.exists(local_path):
                 updates.append(file)
+            else:
+                # Compare hashes for existing files
+                if not self.is_file_up_to_date(local_path, file["hash"]):
+                    updates.append(file)
         return updates
 
-    def download_file(self, file):
+    def is_file_up_to_date(self, local_path, expected_hash):
+        """Compare the local file hash with the hash from the manifest."""
+        if not os.path.exists(local_path):
+            return False
+        with open(local_path, "rb") as f:
+            local_hash = hashlib.sha256(f.read()).hexdigest()
+        return local_hash == expected_hash
+
+    def download_and_replace_file(self, file):
+        """Download the file and replace the existing one."""
         local_path = os.path.join(os.getcwd(), file["name"])
-        os.makedirs(os.path.dirname(local_path), exist_ok=True)
+        os.makedirs(os.path.dirname(local_path), exist_ok=True)  # Ensure directories exist
+
         try:
+            print(f"Downloading {file['name']}...")
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Updated: {file['name']}")
+            print(f"Replaced: {file['name']}")  # Debug message for successful replace
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
+
 
 
 if __name__ == "__main__":
