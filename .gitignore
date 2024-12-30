@@ -84,3 +84,8 @@ requirements.txt
 /.vs
 main.log
 main.log
+/modules/__pycache__
+/modules/__pycache__
+/modules/__pycache__
+/modules/__pycache__
+/modules/__pycache__
