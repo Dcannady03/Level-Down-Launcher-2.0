@@ -4,147 +4,147 @@
         {
             "name": "launcher.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/launcher.py",
-            "checksum": "eb2f07cc1af0638512b5d3dafdcbd1e1"
+            "checksum": "38c133716578a6ef2815d215b6f91fd9a5f00330b3487d36fbc64393f6a61a00"
         },
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "ef50c22e4679783535bdb23f479e9fbe"
+            "checksum": "e7e29437880a1026760f73829517d82968941026a35626f1d0c5a81a5549e32a"
         },
         {
             "name": "qt.conf",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/qt.conf",
-            "checksum": "907f70c0beca63fd722833719e5df5a8"
+            "checksum": "16ada2634bbefd79894688e9fbefe44b75270d112d6a16fbedcfef75dec0bc67"
         },
         {
             "name": "splash_screen.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/splash_screen.py",
-            "checksum": "676c4243a7aa761fe8063d47517eae72"
+            "checksum": "748e9bd11602b95a48698922dc862e4db49faba6736bf0ec6d1df4b73a6f4eb5"
         },
         {
             "name": "assets/images/ashita.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/ashita.png",
-            "checksum": "8b4264866375b556656c34df988dfd6b"
+            "checksum": "45f014b6a1671e7bb1c73df4f5e4d53dc6777054eca08a0b750fc9fd46d0c669"
         },
         {
             "name": "assets/images/ashitatxt.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/ashitatxt.png",
-            "checksum": "cea960f942b7f337492c27b3dc1cb0df"
+            "checksum": "0dc08d4e00e1db0c180df371ea8825cd4dcc0b4b00e0d188efcd22f59206ad70"
         },
         {
             "name": "assets/images/sidebarbackground.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/sidebarbackground.png",
-            "checksum": "f2eaab251356e27ee979954824599099"
+            "checksum": "ec344f55579b6c6c783b9265b86faa5e1d77d909f972cea389fa1374f455cf80"
         },
         {
             "name": "assets/images/test6.ico",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/test6.ico",
-            "checksum": "d6c7939e8b402e8268ce42764294f5e1"
+            "checksum": "d1c7cf9b7605361e8953260945be5efecaa3ce72bc9fc01aa1e3f6b2a1fbf942"
         },
         {
             "name": "assets/images/test6.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/test6.png",
-            "checksum": "7746130876e0c6f76f05dbbcb0e35218"
+            "checksum": "61a66c42ae7f6e872669e8bed4bb9dec2604545d3caae8484cb5fd10d2f1d5a8"
         },
         {
             "name": "assets/images/wallpaper3.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/wallpaper3.png",
-            "checksum": "1bf3a526b5f8515605272f112c43d4bf"
+            "checksum": "d37355d08b64d981151cf1e26de81b342b85e40376632949ed44c8d3392e7e35"
         },
         {
             "name": "assets/images/wiki.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/wiki.png",
-            "checksum": "9391b5ac7d5962cb9c913705eecc3eaf"
+            "checksum": "077d673eb473230cd186cc8dbd04a190b00d85de4fc9b72d5eda0fecf503dfe4"
         },
         {
             "name": "assets/images/wikitxt.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/wikitxt.png",
-            "checksum": "90da422856ef4fbd75f70813b9b5c722"
+            "checksum": "b0498c1c88b7c46b3c134e00afaa67291107da74d9a1de6e9ae14bf3b62193cc"
         },
         {
             "name": "assets/images/windower.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/windower.png",
-            "checksum": "bd2a2aad4c98850c6e952b4bedf43a2b"
+            "checksum": "791ee98308a5e2b14640b0dbde3e8d9086f7944392c6193bf3d3a44d00462883"
         },
         {
             "name": "assets/images/windowertxt.png",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/images/windowertxt.png",
-            "checksum": "881ae345cb2aee662c59c99a4344f2a1"
+            "checksum": "fd2d82216ad318d917d7994f1ee0ac86828345a524449cc64b321a5544f87874"
         },
         {
             "name": "assets/styles/dark_theme.qss",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/assets/styles/dark_theme.qss",
-            "checksum": "8342c961739b724fe672887eabecaa62"
+            "checksum": "fc1d678d2375ecfaea4e4d09a25b825b7dafc4b79a9f3950195dfcea434e1826"
         },
         {
             "name": "modules/dashboard.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/dashboard.py",
-            "checksum": "19d527a8755caca4755b462f5122e597"
+            "checksum": "155e825a1ccfabafbbe0a5b940aeb34899c732bedfc1015fd5160ae0f5fe874b"
         },
         {
             "name": "modules/server_tabs.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs.py",
-            "checksum": "4e0f6683e401aed24ca3a11f27ca8992"
+            "checksum": "4f1fc0fa7222620fcdb1c1bf70c698bf8bdadd080e2f50ee9dd2c2b543b69806"
         },
         {
             "name": "modules/settings.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/settings.py",
-            "checksum": "ab216c4560340ef8e68cca7d1d5d46a4"
+            "checksum": "96fe77e7b1b02399ca640c3abe329f8ae5bf073cca4b7761dc3e851972319146"
         },
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "2603293775d0d691910c2952bc29bc25"
+            "checksum": "d7e26adf87a7244c3f7d74e52037efcec794265232caf6e5ebf60b2ab90c86e4"
         },
         {
             "name": "modules/updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/updater.py",
-            "checksum": "39c1552f3bac193ce52a1e5582105903"
+            "checksum": "912e979ae180d03582b808d0ebeef2c3c0f0a78ad82a8ea7eac99fc1ac4d1922"
         },
         {
             "name": "modules/xi_updater.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/xi_updater.py",
-            "checksum": "96c856abef2e78e8ffd26e07dff6fb3e"
+            "checksum": "35f2295b3780ed7786d41aeeffe7dc525639609e221d2f908d7d02e962687cf4"
         },
         {
             "name": "modules/__init__.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/__init__.py",
-            "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+            "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         },
         {
             "name": "modules/server_tabs/level_down_75.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/level_down_75.py",
-            "checksum": "8dc810ef66a3e6c91933fc3aead284f1"
+            "checksum": "daec9c42bf61e7f5e753e2c471ba32cd297ad2fe14a52d054dc6ba2620fcd600"
         },
         {
             "name": "modules/server_tabs/level_down_75_era.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/level_down_75_era.py",
-            "checksum": "1f5ffdff80e91206abd718f58bad88d5"
+            "checksum": "822b4d566af85f2d9f069692a9b11f02a9bdbe2a9a743422da314ab09ee03963"
         },
         {
             "name": "modules/server_tabs/level_down_99.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/level_down_99.py",
-            "checksum": "d1d7ab56e42be2d661fd35806aed9ab5"
+            "checksum": "0b4a134e71c5ec719687d022fb6ff43f22edfb3aef5f8a9b2742917cb0981652"
         },
         {
             "name": "modules/server_tabs/__init__.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/server_tabs/__init__.py",
-            "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+            "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         },
         {
             "name": "platforms/qminimal.dll",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qminimal.dll",
-            "checksum": "f534ea5b2e138cf01fc63095bfed91cd"
+            "checksum": "1f03f0a4358061b49ade4885526dc9f4c4542b130b6bc418c60328d19a3af553"
         },
         {
             "name": "platforms/qoffscreen.dll",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qoffscreen.dll",
-            "checksum": "712be32d69ccfcc5e8e07eb0b0252838"
+            "checksum": "01eb833a4b517073b8f443f5a99198b021caeb207773ff405b8a421d6ed405a4"
         },
         {
             "name": "platforms/qwindows.dll",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/platforms/qwindows.dll",
-            "checksum": "9e9ede62dac5ed360ad811c409b96ec7"
+            "checksum": "f4a118afd9259cd928f55fa87f6fbc2cd88478e79bc75f4032d650b7e01e16aa"
         }
     ]
 }
