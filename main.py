@@ -149,13 +149,13 @@ class UpdateWorker(QThread):
             local_path = os.path.join(os.getcwd(), file["name"])
             local_hash = self.calculate_sha256(local_path)
 
-            # Debugging: Log both hashes
-            print(f"File: {file['name']}")
-            print(f"Local Hash: {local_hash}")
-            print(f"Manifest Hash: {file.get('checksum')}")
-
-            if local_hash is None or local_hash != file.get("checksum"):
-                print(f"File {file['name']} needs to be updated.")
+            # Ensure we only fetch and update files that are missing or mismatched
+            print(f"Checking file: {file['name']}")
+            if local_hash is None:
+                print(f"File {file['name']} is missing locally. Marking for update.")
+                updates.append(file)
+            elif local_hash != file.get("checksum"):
+                print(f"Checksum mismatch for {file['name']}. Marking for update.")
                 updates.append(file)
             else:
                 print(f"File {file['name']} is up-to-date.")
