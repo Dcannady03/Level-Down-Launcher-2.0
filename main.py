@@ -5,7 +5,6 @@ import os
 import sys
 import requests
 import hashlib
-import subprocess
 import json
 
 class SplashScreen(QMainWindow):
@@ -26,7 +25,8 @@ class SplashScreen(QMainWindow):
         self.background.setScaledContents(True)
         self.background.setGeometry(0, 0, 600, 400)
 
-        # Status and Progress
+        # Overlay Layout
+        self.overlay = QVBoxLayout()
         self.status_label = QLabel("Initializing...")
         self.status_label.setFont(QFont("Arial", 14))
         self.status_label.setStyleSheet("color: white;")
@@ -47,20 +47,19 @@ class SplashScreen(QMainWindow):
             }
         """)
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.status_label)
-        layout.addWidget(self.progress_bar)
+        self.overlay.addWidget(self.status_label)
+        self.overlay.addWidget(self.progress_bar)
 
         overlay_widget = QWidget(self)
-        overlay_widget.setLayout(layout)
+        overlay_widget.setLayout(self.overlay)
         overlay_widget.setGeometry(50, 250, 500, 100)
 
-        # Update Worker
         self.worker = UpdateWorker()
         self.worker.update_progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_update_complete)
         self.worker.start()
-        print("UpdateWorker started.")
+
+        print("SplashScreen initialized.")
 
     def update_progress(self, progress, message):
         print(f"Progress updated: {progress}, Message: {message}")
@@ -68,17 +67,13 @@ class SplashScreen(QMainWindow):
         self.progress_bar.setValue(progress)
 
     def on_update_complete(self, restart_required):
-        """Handle completion of the update process."""
-        self.status_label.setText("Launching application...")
-        print("Update completed. Launching the launcher...")
-
-        launcher_path = os.path.join(os.getcwd(), "launcher.py")
-        if os.path.exists(launcher_path):
-            subprocess.run([sys.executable, launcher_path])
+        if restart_required:
+            self.status_label.setText("Restarting application...")
+            os.execl(sys.executable, sys.executable, *sys.argv)
         else:
-            print("Launcher script not found. Exiting.")
-
-        self.close()
+            self.status_label.setText("Launching application...")
+            print("Update complete. Launching launcher...")
+            os.system("python launcher.py")  # Adjust the path if necessary
 
 
 class UpdateWorker(QThread):
@@ -89,30 +84,32 @@ class UpdateWorker(QThread):
 
     def run(self):
         try:
+            self.update_progress.emit(10, "Fetching manifest...")
             manifest = self.fetch_manifest()
+
             if not manifest:
                 self.update_progress.emit(0, "Failed to fetch manifest.")
                 self.finished.emit(False)
                 return
 
-            self.update_progress.emit(10, "Checking for updates...")
-            files_to_update = self.check_for_updates(manifest)
-
+            self.update_progress.emit(20, "Comparing files...")
+            files_to_update = self.compare_files(manifest)
             if not files_to_update:
                 self.update_progress.emit(100, "No updates required.")
                 self.finished.emit(False)
                 return
 
-            self.update_progress.emit(50, "Downloading updates...")
-            for i, file in enumerate(files_to_update, start=1):
+            total_files = len(files_to_update)
+            for i, file in enumerate(files_to_update, 1):
+                self.update_progress.emit(
+                    int((i / total_files) * 80) + 20,
+                    f"Updating {file['name']}..."
+                )
                 self.download_file(file)
-                self.update_progress.emit(50 + int((i / len(files_to_update)) * 50), f"Updating {file['name']}...")
 
-            self.update_progress.emit(100, "Updates completed.")
-            self.finished.emit(True if any(f['name'] == "launcher.py" for f in files_to_update) else False)
-
+            self.update_progress.emit(100, "Updates complete!")
+            self.finished.emit(any(file["name"] == "launcher.py" for file in files_to_update))
         except Exception as e:
-            print(f"Error during update: {e}")
             self.update_progress.emit(0, f"Error: {e}")
             self.finished.emit(False)
 
@@ -122,23 +119,27 @@ class UpdateWorker(QThread):
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Error fetching manifest: {e}")
+            print(f"Failed to fetch manifest: {e}")
             return None
 
-    def check_for_updates(self, manifest):
+    def compare_files(self, manifest):
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path) or self.calculate_checksum(local_path) != file["checksum"]:
+            if not os.path.exists(local_path) or self.calculate_hash(local_path) != file["hash"]:
                 updates.append(file)
         return updates
 
-    def calculate_checksum(self, file_path):
+    @staticmethod
+    def calculate_hash(file_path):
         sha256 = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            while chunk := f.read(8192):
-                sha256.update(chunk)
-        return sha256.hexdigest()
+        try:
+            with open(file_path, "rb") as f:
+                while chunk := f.read(8192):
+                    sha256.update(chunk)
+            return sha256.hexdigest()
+        except FileNotFoundError:
+            return None
 
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
@@ -149,9 +150,9 @@ class UpdateWorker(QThread):
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Downloaded and replaced: {file['name']}")
+            print(f"Updated: {file['name']}")
         except Exception as e:
-            print(f"Failed to download {file['name']}: {e}")
+            print(f"Error downloading {file['name']}: {e}")
 
 
 if __name__ == "__main__":
