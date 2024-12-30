@@ -147,7 +147,7 @@ class UpdateWorker(QThread):
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            local_hash = self.calculate_sha256(local_path)  # Ensure only one argument is passed
+            local_hash = self.calculate_sha256(local_path)
 
             print(f"Checking file: {file['name']}")
             if local_hash is None:
@@ -161,52 +161,36 @@ class UpdateWorker(QThread):
         return updates
 
 
+
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
-        temp_path = local_path + ".tmp"
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
         try:
-            # Download the file to a temporary location
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
-            with open(temp_path, "wb") as f:
+            with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Downloaded: {file['name']} to temporary file.")
-
-            # Compute hash of the downloaded file
-            downloaded_hash = self.calculate_sha256(temp_path)
-            print(f"Expected Hash: {file['checksum']}")
-            print(f"Downloaded File Hash: {downloaded_hash}")
-
-            # Validate checksum
-            if downloaded_hash == file["checksum"]:
-                os.replace(temp_path, local_path)  # Replace the original file
-                print(f"File {file['name']} updated successfully.")
-            else:
-                print(f"Checksum mismatch for {file['name']}. File not updated.")
-                os.remove(temp_path)  # Delete the temporary file
+            print(f"Downloaded: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
-            if os.path.exists(temp_path):
-                os.remove(temp_path)
 
 
-    def calculate_sha256(self, file_path):
-
+    def calculate_sha256(self, file_path):  # self is required here
         sha256 = hashlib.sha256()
         try:
             with open(file_path, "rb") as f:
-                while chunk := f.read(8192):
+                for chunk in iter(lambda: f.read(8192), b""):
                     sha256.update(chunk)
             return sha256.hexdigest()
         except FileNotFoundError:
+            print(f"File not found: {file_path}")
             return None
 
-    # Example usage
-    local_file = "path/to/local/file"
-    print("Local file hash:", calculate_sha256(local_file))
+
+    
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
