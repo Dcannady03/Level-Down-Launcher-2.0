@@ -198,7 +198,8 @@ class UpdateWorker(QThread):
                 os.remove(temp_path)
 
 
-    def calculate_sha256(file_path):
+    def calculate_sha256(self, file_path):
+
         sha256 = hashlib.sha256()
         try:
             with open(file_path, "rb") as f:
