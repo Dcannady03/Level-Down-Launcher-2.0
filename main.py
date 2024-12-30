@@ -148,9 +148,14 @@ class UpdateWorker(QThread):
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
             local_hash = self.calculate_sha256(local_path)
-
-            # Ensure we only fetch and update files that are missing or mismatched
+        
+            # Debugging: Log both local and manifest hashes
             print(f"Checking file: {file['name']}")
+            print(f"Local Path: {local_path}")
+            print(f"Local Hash: {local_hash}")
+            print(f"Manifest Hash: {file.get('checksum')}")
+
+            # Check if file is missing or checksum mismatched
             if local_hash is None:
                 print(f"File {file['name']} is missing locally. Marking for update.")
                 updates.append(file)
