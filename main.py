@@ -176,7 +176,15 @@ class UpdateWorker(QThread):
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Updated: {file['name']}")
+            print(f"Downloaded: {file['name']}")
+
+            # Validate downloaded file's hash
+            downloaded_hash = self.calculate_sha256(local_path)
+            if downloaded_hash != file.get("checksum"):
+                print(f"Error: Hash mismatch for {file['name']}.")
+            else:
+                print(f"File {file['name']} validated successfully.")
+
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
 
