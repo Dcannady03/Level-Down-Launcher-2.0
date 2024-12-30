@@ -147,10 +147,17 @@ class UpdateWorker(QThread):
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
             local_hash = self.calculate_sha256(local_path)
+        
+            # Debugging: Log both hashes
+            print(f"File: {file['name']}")
+            print(f"Local Hash: {local_hash}")
+            print(f"Manifest Hash: {file.get('hash')}")
 
             if local_hash != file.get("hash"):
+                print(f"File {file['name']} needs to be updated.")
                 updates.append(file)
-
+            else:
+                print(f"File {file['name']} is up-to-date.")
         return updates
 
     def download_file(self, file):
