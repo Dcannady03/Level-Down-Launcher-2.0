@@ -150,12 +150,12 @@ class UpdateWorker(QThread):
 
             print(f"Files to update: {total_files}")
 
-            # Replace and download files
             for i, file in enumerate(files_to_update, start=1):
+                print(f"Updating {file['name']}...")
                 self.update_progress.emit(
                     int((i / total_files) * 100), f"Updating {file['name']}..."
                 )
-                self.download_and_replace_file(file)
+                self.download_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
             self.finished.emit(any(file["name"] == "main.py" for file in files_to_update))
@@ -177,37 +177,37 @@ class UpdateWorker(QThread):
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path):
+            local_checksum = self.calculate_checksum(local_path)
+            if local_checksum != file["checksum"]:
                 updates.append(file)
-            else:
-                # Compare hashes for existing files
-                if not self.is_file_up_to_date(local_path, file["hash"]):
-                    updates.append(file)
         return updates
 
-    def is_file_up_to_date(self, local_path, expected_hash):
-        """Compare the local file hash with the hash from the manifest."""
-        if not os.path.exists(local_path):
-            return False
-        with open(local_path, "rb") as f:
-            local_hash = hashlib.sha256(f.read()).hexdigest()
-        return local_hash == expected_hash
-
-    def download_and_replace_file(self, file):
-        """Download the file and replace the existing one."""
-        local_path = os.path.join(os.getcwd(), file["name"])
-        os.makedirs(os.path.dirname(local_path), exist_ok=True)  # Ensure directories exist
-
+    def calculate_checksum(self, file_path):
+        if not os.path.exists(file_path):
+            return None
         try:
-            print(f"Downloading {file['name']}...")
+            hash_md5 = hashlib.md5()
+            with open(file_path, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_md5.update(chunk)
+            return hash_md5.hexdigest()
+        except Exception as e:
+            print(f"Error calculating checksum for {file_path}: {e}")
+            return None
+
+    def download_file(self, file):
+        local_path = os.path.join(os.getcwd(), file["name"])
+        os.makedirs(os.path.dirname(local_path), exist_ok=True)
+        try:
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Replaced: {file['name']}")  # Debug message for successful replace
+            print(f"Updated: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
+
 
 
 
