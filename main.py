@@ -154,7 +154,7 @@ class UpdateWorker(QThread):
             print(f"Local Hash: {local_hash}")
             print(f"Manifest Hash: {file.get('checksum')}")
 
-            if local_hash != file.get("checksum"):
+            if local_hash is None or local_hash != file.get("checksum"):
                 print(f"File {file['name']} needs to be updated.")
                 updates.append(file)
             else:
