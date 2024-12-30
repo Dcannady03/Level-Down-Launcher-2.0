@@ -163,16 +163,18 @@ class UpdateWorker(QThread):
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
-
+    
+        print(f"Starting download for {file['name']} to {local_path}")
         try:
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Updated: {file['name']}")
+            print(f"Download complete: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
+
 
 
 if __name__ == "__main__":
