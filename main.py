@@ -7,6 +7,11 @@ import requests
 import hashlib
 from subprocess import Popen
 
+def resource_path(relative_path):
+        """ Get the absolute path to the resource, works for PyInstaller """
+        base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+        return os.path.join(base_path, relative_path)
+
 class SplashScreen(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -17,7 +22,7 @@ class SplashScreen(QMainWindow):
 
         # Background Image
         self.background = QLabel(self)
-        background_path = os.path.join("assets", "images", "test6.png")
+        background_path = resource_path("assets/images/test6.png")
         if not os.path.exists(background_path):
             print(f"Background image not found: {background_path}")
         pixmap = QPixmap(background_path)
@@ -62,6 +67,11 @@ class SplashScreen(QMainWindow):
         self.worker.start()
 
         print("SplashScreen initialized.")
+
+    def resource_path(relative_path):
+        """ Get the absolute path to the resource, works for PyInstaller """
+        base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+        return os.path.join(base_path, relative_path)
 
     def update_progress(self, progress, message):
         print(f"Progress updated: {progress}, Message: {message}")
