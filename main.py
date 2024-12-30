@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QLabel, QVBoxLayout, QProgressBar, QWidget
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-
+from launcher import Launcher
 
 class UpdateWorker(QThread):
     update_progress = pyqtSignal(int, str)
@@ -125,7 +125,7 @@ class SplashScreen(QMainWindow):
 
     def launch_main_window(self):
         self.close()
-        self.main_window = LauncherWindow()
+        self.main_window = Launcher()
         self.main_window.show()
 
 

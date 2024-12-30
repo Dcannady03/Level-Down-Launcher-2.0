@@ -9,12 +9,12 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "1202ea41a327e8b5f4a508c8320537a7"
+            "checksum": "ff4a964038231db0d32ae827ddb3c913"
         },
         {
             "name": "qt.conf",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/qt.conf",
-            "checksum": "f974c0e7bdca17a5d5fe8a6f59beadb3"
+            "checksum": "907f70c0beca63fd722833719e5df5a8"
         },
         {
             "name": "setup.py",
@@ -94,12 +94,12 @@
         {
             "name": "modules/settings.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/settings.py",
-            "checksum": "1f39bdc1119d34f4c2208cbb3a53e4f0"
+            "checksum": "ab216c4560340ef8e68cca7d1d5d46a4"
         },
         {
             "name": "modules/sidebar.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/modules/sidebar.py",
-            "checksum": "4c9b207bf27d74235446d48e64335dcd"
+            "checksum": "2603293775d0d691910c2952bc29bc25"
         },
         {
             "name": "modules/updater.py",
