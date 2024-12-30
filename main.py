@@ -5,7 +5,6 @@ import os
 import sys
 import requests
 import hashlib
-import json
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -34,7 +33,8 @@ class SplashScreen(QMainWindow):
 
         self.progress_bar = QProgressBar()
         self.progress_bar.setRange(0, 100)
-        self.progress_bar.setStyleSheet("""
+        self.progress_bar.setStyleSheet(
+            """
             QProgressBar {
                 border: 2px solid #222;
                 border-radius: 5px;
@@ -45,7 +45,8 @@ class SplashScreen(QMainWindow):
                 background-color: #4CAF50;
                 width: 10px;
             }
-        """)
+            """
+        )
 
         self.overlay.addWidget(self.status_label)
         self.overlay.addWidget(self.progress_bar)
@@ -147,13 +148,13 @@ class UpdateWorker(QThread):
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
             local_hash = self.calculate_sha256(local_path)
-        
+
             # Debugging: Log both hashes
             print(f"File: {file['name']}")
             print(f"Local Hash: {local_hash}")
-            print(f"Manifest Hash: {file.get('hash')}")
+            print(f"Manifest Hash: {file.get('checksum')}")
 
-            if local_hash != file.get("hash"):
+            if local_hash != file.get("checksum"):
                 print(f"File {file['name']} needs to be updated.")
                 updates.append(file)
             else:
@@ -163,18 +164,16 @@ class UpdateWorker(QThread):
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
-    
-        print(f"Starting download for {file['name']} to {local_path}")
+
         try:
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
             with open(local_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Download complete: {file['name']}")
+            print(f"Updated: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
-
 
 
 if __name__ == "__main__":
