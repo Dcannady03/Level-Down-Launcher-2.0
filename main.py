@@ -147,15 +147,9 @@ class UpdateWorker(QThread):
         updates = []
         for file in manifest.get("files", []):
             local_path = os.path.join(os.getcwd(), file["name"])
-            local_hash = self.calculate_sha256(local_path)
-        
-            # Debugging: Log both local and manifest hashes
-            print(f"Checking file: {file['name']}")
-            print(f"Local Path: {local_path}")
-            print(f"Local Hash: {local_hash}")
-            print(f"Manifest Hash: {file.get('checksum')}")
+            local_hash = self.calculate_sha256(local_path)  # Ensure only one argument is passed
 
-            # Check if file is missing or checksum mismatched
+            print(f"Checking file: {file['name']}")
             if local_hash is None:
                 print(f"File {file['name']} is missing locally. Marking for update.")
                 updates.append(file)
@@ -165,6 +159,7 @@ class UpdateWorker(QThread):
             else:
                 print(f"File {file['name']} is up-to-date.")
         return updates
+
 
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
