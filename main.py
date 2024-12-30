@@ -78,38 +78,48 @@ class SplashScreen(QMainWindow):
 
 class UpdateWorker(QThread):
     update_progress = pyqtSignal(int, str)
-    finished = pyqtSignal(bool)
+    finished = pyqtSignal(bool)  # Signal whether a restart is required
 
     MANIFEST_URL = "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/manifest.json"
 
     def run(self):
+        print("UpdateWorker started...")
+
         try:
-            self.update_progress.emit(10, "Fetching manifest...")
+            print("Fetching manifest...")
             manifest = self.fetch_manifest()
-
             if not manifest:
-                self.update_progress.emit(0, "Failed to fetch manifest.")
+                print("Manifest fetch failed.")
+                self.update_progress.emit(0, "Manifest fetch failed.")
                 self.finished.emit(False)
                 return
 
-            self.update_progress.emit(20, "Comparing files...")
-            files_to_update = self.compare_files(manifest)
-            if not files_to_update:
-                self.update_progress.emit(100, "No updates required.")
-                self.finished.emit(False)
-                return
+            print("Manifest fetched successfully.")
+            self.update_progress.emit(10, "Manifest fetched successfully.")
 
+            print("Checking for updates...")
+            files_to_update = self.check_for_updates(manifest)
             total_files = len(files_to_update)
-            for i, file in enumerate(files_to_update, 1):
+
+            if total_files == 0:
+                print("No updates required.")
+                self.update_progress.emit(100, "No updates found.")
+                self.finished.emit(False)
+                return
+
+            print(f"Files to update: {total_files}")
+
+            for i, file in enumerate(files_to_update, start=1):
+                print(f"Updating {file['name']}...")
                 self.update_progress.emit(
-                    int((i / total_files) * 80) + 20,
-                    f"Updating {file['name']}..."
+                    int((i / total_files) * 100), f"Updating {file['name']}..."
                 )
                 self.download_file(file)
 
             self.update_progress.emit(100, "Updates complete!")
-            self.finished.emit(any(file["name"] == "launcher.py" for file in files_to_update))
+            self.finished.emit(any(file['name'] == "launcher.py" for file in files_to_update))
         except Exception as e:
+            print(f"Error in UpdateWorker: {e}")
             self.update_progress.emit(0, f"Error: {e}")
             self.finished.emit(False)
 
@@ -119,19 +129,10 @@ class UpdateWorker(QThread):
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Failed to fetch manifest: {e}")
+            print(f"Error fetching manifest: {e}")
             return None
 
-    def compare_files(self, manifest):
-        updates = []
-        for file in manifest.get("files", []):
-            local_path = os.path.join(os.getcwd(), file["name"])
-            if not os.path.exists(local_path) or self.calculate_hash(local_path) != file["hash"]:
-                updates.append(file)
-        return updates
-
-    @staticmethod
-    def calculate_hash(file_path):
+    def calculate_sha256(self, file_path):
         sha256 = hashlib.sha256()
         try:
             with open(file_path, "rb") as f:
@@ -141,9 +142,21 @@ class UpdateWorker(QThread):
         except FileNotFoundError:
             return None
 
+    def check_for_updates(self, manifest):
+        updates = []
+        for file in manifest.get("files", []):
+            local_path = os.path.join(os.getcwd(), file["name"])
+            local_hash = self.calculate_sha256(local_path)
+
+            if local_hash != file.get("hash"):
+                updates.append(file)
+
+        return updates
+
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
+
         try:
             response = requests.get(file["url"], stream=True)
             response.raise_for_status()
