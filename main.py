@@ -5,6 +5,7 @@ import os
 import sys
 import requests
 import hashlib
+from subprocess import Popen
 
 class SplashScreen(QMainWindow):
     def __init__(self):
@@ -74,7 +75,16 @@ class SplashScreen(QMainWindow):
         else:
             self.status_label.setText("Launching application...")
             print("Update complete. Launching launcher...")
-            os.system("python launcher.py")  # Adjust the path if necessary
+
+            # Close the splash screen
+            self.close()
+
+            # Launch launcher.py
+            launcher_path = os.path.join(os.getcwd(), "launcher.py")
+            try:
+                Popen([sys.executable, launcher_path])  # This starts launcher.py as a new process
+            except Exception as e:
+                print(f"Error launching launcher.py: {e}")
 
 
 class UpdateWorker(QThread):
@@ -137,10 +147,11 @@ class UpdateWorker(QThread):
         sha256 = hashlib.sha256()
         try:
             with open(file_path, "rb") as f:
-                while chunk := f.read(8192):
+                for chunk in iter(lambda: f.read(8192), b""):
                     sha256.update(chunk)
             return sha256.hexdigest()
         except FileNotFoundError:
+            print(f"File not found: {file_path}")
             return None
 
     def check_for_updates(self, manifest):
@@ -160,8 +171,6 @@ class UpdateWorker(QThread):
                 print(f"File {file['name']} is up-to-date.")
         return updates
 
-
-
     def download_file(self, file):
         local_path = os.path.join(os.getcwd(), file["name"])
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
@@ -175,21 +184,6 @@ class UpdateWorker(QThread):
             print(f"Downloaded: {file['name']}")
         except Exception as e:
             print(f"Error downloading {file['name']}: {e}")
-
-
-    def calculate_sha256(self, file_path):  # self is required here
-        sha256 = hashlib.sha256()
-        try:
-            with open(file_path, "rb") as f:
-                for chunk in iter(lambda: f.read(8192), b""):
-                    sha256.update(chunk)
-            return sha256.hexdigest()
-        except FileNotFoundError:
-            print(f"File not found: {file_path}")
-            return None
-
-
-    
 
 
 if __name__ == "__main__":
