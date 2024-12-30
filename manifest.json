@@ -9,17 +9,12 @@
         {
             "name": "main.py",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/main.py",
-            "checksum": "ff4a964038231db0d32ae827ddb3c913"
+            "checksum": "d334c3a3e36abaf1fd78734ba22b0fe7"
         },
         {
             "name": "qt.conf",
             "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/qt.conf",
             "checksum": "907f70c0beca63fd722833719e5df5a8"
-        },
-        {
-            "name": "setup.py",
-            "url": "https://raw.githubusercontent.com/Dcannady03/Level-Down-Launcher-2.0/main/setup.py",
-            "checksum": "6832c452842df61cd55848255069a399"
         },
         {
             "name": "splash_screen.py",
