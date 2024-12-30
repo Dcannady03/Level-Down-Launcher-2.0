@@ -56,3 +56,12 @@ class Launcher(QMainWindow):
 
         return tabs
 
+if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    launcher = Launcher()
+    launcher.show()
+    sys.exit(app.exec())
+
